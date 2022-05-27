@@ -1,6 +1,7 @@
 package controller.commands;
 import entity.LabWorkDTO;
 import model.Repository;
+import requests.Response;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ public class AddIfMin implements Serializable, Commandable {
      * @return
      */
     @Override
-    public String execute(Object o, String login) {
+    public Response execute(Object o, String login) {
         return Repository.addIfMin((LabWorkDTO) o, login);
     }
 

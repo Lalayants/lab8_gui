@@ -2,6 +2,7 @@ package controller.commands;
 
 import entity.LabWorkDTO;
 import model.Repository;
+import requests.Response;
 
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ public class Add implements Commandable, Serializable {
      * @return
      */
     @Override
-    public String execute(Object o, String login) {
+    public Response execute(Object o, String login) {
         return Repository.add((LabWorkDTO) o, login);
     }
 

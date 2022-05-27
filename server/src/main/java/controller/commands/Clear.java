@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.io.Serializable;
 import model.Repository;
+import requests.Response;
 
 /**
  * Класс команды очистки коллекции
@@ -12,7 +13,7 @@ import model.Repository;
  */
 public class Clear implements Serializable, Commandable {
     @Override
-    public String execute(Object o, String login) {
+    public Response execute(Object o, String login) {
         return Repository.clearUsersLabworks(login);
 
 //        try {

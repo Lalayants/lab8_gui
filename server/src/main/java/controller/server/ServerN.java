@@ -1,15 +1,17 @@
 package controller.server;
 
 import controller.commands.Invoker;
+import requests.Response;
 import view.ConsoleIO;
-import request.Request;
+import requests.Request;
 import controller.utilities.TableCreator;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,6 +20,7 @@ public class ServerN {
     private ServerSocket serverSocket;
     private final ReentrantLock lock = new ReentrantLock();
     public static int PORT = 8085;
+    private static HashMap<Socket, ObjectOutputStream> activeConnections= new HashMap<>();
 
 
     /**
@@ -63,14 +66,15 @@ public class ServerN {
     class ServiceRequest implements Runnable {
         private final Socket socket;
         private ObjectInputStream inn;
-        private DataOutputStream dout;
+        private ObjectOutputStream dout;
         private String login;
 
         public ServiceRequest(Socket connection) {
             this.socket = connection;
             try {
-                dout = new DataOutputStream(socket.getOutputStream());
+                dout = new ObjectOutputStream(socket.getOutputStream());
                 inn = new ObjectInputStream(socket.getInputStream());
+                activeConnections.put(socket, dout);
 //                ObjectOutputStream outt = new ObjectOutputStream(socket.getOutputStream());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -82,17 +86,21 @@ public class ServerN {
                 ConsoleIO.ConsoleOut("Running " + socket);
                 while (true) {
                     Request req = (Request) inn.readObject();
-                    login = req.getLogin();                                                     //FutureTask a = new FutureTask(Callable)
-                    Future<String> answer = processorService.submit(new RequestProcessor(req));//можно просто через FutureTask, но тогда бещ executors
-                    answerService.submit(new RequestAnswer(dout, answer.get()));
+                    login = req.getLogin();
+                    Future<Object> response = processorService.submit(new RequestProcessor(req));
+                    Response r = (Response) response.get();
+                    if (!r.isForUpdate())
+                        answerService.submit(new RequestAnswer(dout, response.get()));
+                    if(r.getCommand().equals("login") || r.getCommand().equals("register"))
+                            login = r.getAnswer();
                 }
-            } catch (ClassCastException | ClassNotFoundException e) {
+            } catch (ClassCastException | ClassNotFoundException | ExecutionException | InterruptedException e) {
                 e.printStackTrace();
-            } catch (IOException | InterruptedException | ExecutionException e) {
+            } catch (IOException  e) {
                 ConsoleIO.ConsoleOut(login + " disconnected");
-
             } finally {
-                System.out.println("close# " + login);
+                ConsoleIO.ConsoleOut("close# " + login);
+                activeConnections.remove(socket);
                 try {
                     socket.close();
                 } catch (SocketException e) {
@@ -104,7 +112,7 @@ public class ServerN {
         }
     }
 
-    class RequestProcessor implements Callable<String> {
+    class RequestProcessor implements Callable<Object> {
         Request r;
 
         public RequestProcessor(Request in) {
@@ -112,29 +120,42 @@ public class ServerN {
         }
 
         @Override
-        public String call() {
+        public Object call() {
             lock.lock();
             ConsoleIO.ConsoleOut("Executing " + r.getCommand_name() + " from " + r.getLogin());
-            String a = Invoker.getInvoker().commands.get(r.getCommand_name()).execute(r.getArgs(), r.getLogin());
+            Response a = (Response) Invoker.getInvoker().commands.get(r.getCommand_name()).execute(r.getArgs(), r.getLogin());
+            if (a.isForUpdate()){
+                ObjectOutputStream out;
+                Set<Socket> connections = activeConnections.keySet();
+                for (Socket s: connections){
+                    try {
+                        out = activeConnections.get(s);
+                        out.writeObject(a);
+                        out.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             lock.unlock();
             return a;
-
         }
     }
 
     static class RequestAnswer implements Runnable {
-        DataOutputStream out;
-        String answer;
+        ObjectOutputStream out;
+        Object response;
 
-        public RequestAnswer(DataOutputStream out, String answer) {
+        public RequestAnswer(ObjectOutputStream out, Object answer) {
             this.out = out;
-            this.answer = answer;
+            this.response = answer;
         }
 
         @Override
         public void run() {
             try {
-                out.writeUTF(answer);
+                out.writeObject(response);
+                out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,11 +1,17 @@
-package request;
+package requests;
 
 import entity.LabWorkDTO;
 
 import java.io.Serializable;
 
+/**
+ * It's a class that represents a request to the server
+ */
+/**
+ * It's a class that represents a request to the server
+ */
 public class Request implements Serializable {
-    private final String command_name;
+    private String command_name;
     private String login;
     private Object args;
 //    private Object extra;
@@ -51,4 +57,5 @@ public class Request implements Serializable {
         a.setId(id);
         args = a;
     }
+
 }

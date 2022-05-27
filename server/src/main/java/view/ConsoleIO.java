@@ -11,7 +11,7 @@ public class ConsoleIO {
     private static Scanner in = new Scanner(System.in);
 
     public static void ConsoleOut(String s) {
-        System.out.print(s);
+        System.out.println(s);
     }
 
 

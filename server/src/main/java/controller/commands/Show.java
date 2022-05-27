@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class Show implements Commandable, Serializable {
     @Override
-    public String execute(Object o, String login) {
+    public Object execute(Object o, String login) {
         try {
             return Repository.getCollectionFromSql();
         } catch (SQLException e) {

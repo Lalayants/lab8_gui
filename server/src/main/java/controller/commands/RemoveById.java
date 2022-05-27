@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class RemoveById implements Serializable, Commandable {
     @Override
-    public String execute(Object o, String login) {
+    public Object execute(Object o, String login) {
         try {
             int id = Integer.parseInt((String) o);
             return Repository.removeById(id, login);

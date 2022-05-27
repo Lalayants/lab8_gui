@@ -2,10 +2,12 @@ package controller.commands;
 
 import controller.utilities.PasswordEncryptor;
 import controller.utilities.TableCreator;
+import requests.Response;
 
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -16,7 +18,9 @@ import java.sql.SQLException;
 
 public class Register implements Serializable, Commandable {
     @Override
-    public String execute(Object o, String login) {
+    public Object execute(Object o, String login) {
+        Response response =  new Response("");
+        response.setCommand("register");
         try {
             String [] data = ((String) o) .split(" ");
             Connection c = TableCreator.getConnection();
@@ -27,9 +31,17 @@ public class Register implements Serializable, Commandable {
             stmt.setString(1, data[0]);
             stmt.setString(2, PasswordEncryptor.generate(data[1]));
             stmt.executeUpdate();
-            return "Регистрация прошла успешно";
+            String CreateInSql = "select id from users where login = ?";
+            stmt = c.prepareStatement(CreateInSql);
+            stmt.setString(1, data[0]);
+            ResultSet res = stmt.executeQuery();
+            res.next();
+            Integer id = res.getInt("id");
+             response.setAnswer(id.toString());
+            return response;
         } catch (SQLException e) {
-            return "Такой пользователь уже есть в системе, попробуйте другой логин";
+            response.setAnswer("Такой пользователь уже есть в системе, попробуйте другой логин");
+            return response;
         }
     }
 
