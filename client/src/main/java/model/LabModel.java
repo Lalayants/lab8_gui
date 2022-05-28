@@ -169,7 +169,7 @@ public class LabModel implements Serializable {
         this.minimalPoint = new SimpleFloatProperty(minimalPoint);
     }
 
-    public double getPersonalQualitiesMinimum() {
+    public int getPersonalQualitiesMinimum() {
         return personalQualitiesMinimum.get();
     }
 

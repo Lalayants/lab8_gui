@@ -14,8 +14,11 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-public class AppController{
+public class AppController {
     private int creators_id;
+    private boolean editIsClosed = true;
+    private Stage editStage;
+    private LabModel activeLabWork;
     @FXML
     private TableView<LabModel> labModelTableView;
     @FXML
@@ -47,9 +50,9 @@ public class AppController{
     private TableColumn<LabModel, String> eyeColorColumn;
     @FXML
     private TableColumn<LabModel, Integer> creatorsIdColumn;
+
     @FXML
     private void initialize() {
-        // Инициализация таблицы адресатов с двумя столбцами.
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().creationDateProperty());
@@ -68,18 +71,54 @@ public class AppController{
         labModelTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showPersonDetails(newValue));
 
-        labModelTableView.setRowFactory( tv -> {
+        labModelTableView.setRowFactory(tv -> {
             TableRow<LabModel> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
-                    System.out.println('1');
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    if (!editIsClosed) {
+                        editStage.close();
+                        editIsClosed = true;
+                    }else{
+                        handleEditLabWork();
+                    }
                 }
             });
             return row;
         });
     }
 
+    @FXML
+    private void handleEditLabWork() {
+        try {
+            Integer id = Integer.parseInt(idTextField.getText());
+            if (creators_id == LoginWindow.id) {
+                EditController.setLab(activeLabWork);
+                String fxmlName = "EditDialog";
+                Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxmlName + ".fxml"));
+                Stage stage = new Stage();
+                editStage = stage;
+                stage.setTitle("Edit Utility");
+                Scene a = new Scene(root1, 380, 400);
+                a.getRoot().setStyle("-fx-font-family: 'arial'");
+                stage.setScene(a);
+                editButton.setDisable(true);
+                editIsClosed = false;
+                stage.showAndWait();
+                editButton.setDisable(false);
+                editIsClosed = true;
+            } else {
+                showErrorAlert("Ошибка", "Ошибка редактирования", "Вы не можете редактировать чужие работы!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            showErrorAlert("Ошибка", "Ошибка редактирования", "Сначала выберите, какую работу редактировать!");
+        }
+    }
+
+    @FXML
     private void showPersonDetails(LabModel labWork) {
+        activeLabWork = labWork;
         if (labWork != null) {
             // Заполняем метки информацией из объекта person.
             idTextField.setText(String.valueOf(labWork.getId()));
@@ -94,7 +133,6 @@ public class AppController{
             eyeColorTextField.setText(labWork.getEyeColor());
             weightTextField.setText(String.valueOf(labWork.getWeight()));
             creators_id = labWork.getCreators_id();
-
         } else {
             idTextField.setText("");
             nameTextField.setText("");
@@ -109,6 +147,7 @@ public class AppController{
             weightTextField.setText("");
         }
     }
+
     @FXML
     private void handleDeleteLabWork() {
         try {
@@ -117,28 +156,26 @@ public class AppController{
             if (creators_id == LoginWindow.id) {
                 Request request = new Request("remove_by_id", id.toString());
                 LoginWindow.clientN.giveSessionToSent(request);
-                showConfirmationAlert("Успешно", "Удаление записи", "Удаление записи прошло успешно");
+                showInfoAlert("Успешно", "Удаление записи", "Удаление записи прошло успешно");
             } else {
-                showMistakeAlert("Ошибка", "Ошибка удаления", "Вы не можете удалять чужие работы!");
+                showErrorAlert("Ошибка", "Ошибка удаления", "Вы не можете удалять чужие работы!");
             }
-        }catch (NumberFormatException e){
-            showMistakeAlert("Ошибка","Ошибка удаления","Сначала выберите, какую работу удалять!");
+        } catch (NumberFormatException e) {
+            showErrorAlert("Ошибка", "Ошибка удаления", "Сначала выберите, какую работу удалять!");
         }
     }
+
     @FXML
     private void handleClearLabWorks() {
         if (showConfirmationAlert("Подтверждение", "Подтверждение удаления", "Вы уверены, что хотите удалить все свои записи?"))
             LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
     }
+
     @FXML
     private void handleAddLabWork() {
         showPersonAddDialog();
-
     }
-    @FXML
-    private void handleEditLabWork() {
 
-    }
     public void showPersonAddDialog() {
         try {
             String fxmlName = "AddDialog";
@@ -151,12 +188,12 @@ public class AppController{
             addButton.setDisable(true);
             stage.showAndWait();
             addButton.setDisable(false);
-        } catch ( IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void showMistakeAlert(String title, String header, String content){
+    public static void showErrorAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Scene scene = alert.getDialogPane().getScene();
         scene.getRoot().setStyle("-fx-font-family: 'arial'");
@@ -166,7 +203,8 @@ public class AppController{
         alert.setContentText(content);
         alert.showAndWait();
     }
-    public static boolean showConfirmationAlert(String title, String header, String content){
+
+    public static boolean showConfirmationAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         Scene scene = alert.getDialogPane().getScene();
         scene.getRoot().setStyle("-fx-font-family: 'arial'");
@@ -176,5 +214,16 @@ public class AppController{
         alert.setContentText(content);
         Optional<ButtonType> res = alert.showAndWait();
         return res.get() == ButtonType.OK;
+    }
+
+    public static void showInfoAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Scene scene = alert.getDialogPane().getScene();
+        scene.getRoot().setStyle("-fx-font-family: 'arial'");
+        alert.initOwner(LoginWindow.prStage);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

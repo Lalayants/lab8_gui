@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.LabModel;
@@ -17,8 +16,9 @@ import viewGUI.login.LoginWindow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddController implements Initializable {
-    ObservableList<String> difficulties = FXCollections.observableArrayList("Hard", "Terrible", "Insane");
+public class EditController implements Initializable {
+    private static LabModel labModel;
+    ObservableList<String> difficulties = FXCollections.observableArrayList("HARD", "TERRIBLE", "INSANE");
     ObservableList<String> colors = FXCollections.observableArrayList("BLACK", "BLUE", "YELLOW", "ORANGE", "BROWN");
     public LabModel enteredLabModel;
     @FXML
@@ -31,17 +31,21 @@ public class AddController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        difficultyChoice.setItems(difficulties);
-        eyeColorChoice.setItems(colors);
+//        difficultyChoice.setItems(difficulties);
+//        eyeColorChoice.setItems(colors);
+        difficultyChoice.setValue(labModel.getDifficulty());
+        eyeColorChoice.setValue(labModel.getEyeColor());
+        setPerson();
     }
-    public void cancelButtonOnAction(){
+
+    public void cancelButtonOnAction() {
         Stage stage = (Stage) difficultyChoice.getScene().getWindow();
         stage.close();
     }
 
-    public void getLabWork() {
+    public void editButtonOnAction() {
+
         String mistake = "";
-        LabModel labModel = new LabModel();
         String name = nameField.getText();
         String x = xField.getText();
         String y = yField.getText();
@@ -49,8 +53,8 @@ public class AddController implements Initializable {
         String author = authorField.getText();
         String personalPoint = personalPointField.getText();
         String minimalPoint = minimalPointField.getText();
-        String difficulty = (String) difficultyChoice.getValue();
-        String eyeColor = (String) eyeColorChoice.getValue();
+        String difficulty = difficultyChoice.getValue();
+        String eyeColor = eyeColorChoice.getValue();
         if (name == null) {
             mistake += "Имя должно быть заполнено\n";
         } else {
@@ -59,9 +63,9 @@ public class AddController implements Initializable {
         if (difficulty == null) {
             mistake += "Сложность должна быть заполнено\n";
         } else {
-            labModel.setDifficulty(difficulty);
+            labModel.setDifficulty(difficulty.toUpperCase());
         }
-        if (eyeColor  != null) {
+        if (eyeColor != null) {
             labModel.setEyeColor(eyeColor);
         }
         if (author == null) {
@@ -69,7 +73,7 @@ public class AddController implements Initializable {
         } else {
             labModel.setAuthor(author);
         }
-        if (x  == null) {
+        if (x == null) {
             mistake += "X должен быть заполнен\n";
         } else {
             try {
@@ -122,18 +126,43 @@ public class AddController implements Initializable {
 
         if (mistake.isEmpty()) {
             enteredLabModel = labModel;
-            LoginWindow.clientN.giveSessionToSent(new Request("add", enteredLabModel.toDTO()));
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            Scene scene = alert.getDialogPane().getScene();
-            scene.getRoot().setStyle("-fx-font-family: 'arial'");
-            alert.initOwner(LoginWindow.prStage);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Ошибка заполнения");
-            alert.setContentText(mistake);
-            alert.showAndWait();
+            LoginWindow.clientN.giveSessionToSent(new Request("update", enteredLabModel.toDTO()));
+            cancelButtonOnAction();
+            AppController.showInfoAlert("Успешно", "Редактирование выполнено", "Лабораторная работа отредактирована.");
+
+        } else {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            Scene scene = alert.getDialogPane().getScene();
+//            scene.getRoot().setStyle("-fx-font-family: 'arial'");
+//            alert.initOwner(LoginWindow.prStage);
+//            alert.setTitle("Ошибка");
+//            alert.setHeaderText("Ошибка заполнения");
+//            alert.setContentText(mistake);
+//            alert.showAndWait();
+            AppController.showErrorAlert("Ошибка", "Ошибка заполнения", mistake);
         }
     }
 
+    public void updateFieldsForNewLabWork() {
+
+    }
+
+
+    public void setPerson() {
+        difficultyChoice.setItems(difficulties);
+        eyeColorChoice.setItems(colors);
+        nameField.setText(labModel.getName());
+        xField.setText(String.valueOf(labModel.getX()));
+        yField.setText(String.valueOf(labModel.yProperty().get()));
+        minimalPointField.setText(String.valueOf(labModel.getMinimalPoint()));
+        personalPointField.setText(String.valueOf(labModel.getPersonalQualitiesMinimum()));
+        authorField.setText(labModel.getAuthor());
+        weightField.setText(String.valueOf(labModel.getWeight()));
+        eyeColorChoice.setValue(labModel.getEyeColor());
+        difficultyChoice.setValue(labModel.getDifficulty());
+    }
+
+    public static void setLab(LabModel l) {
+        labModel = l;
+    }
 }

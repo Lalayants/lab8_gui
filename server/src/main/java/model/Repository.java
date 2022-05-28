@@ -343,7 +343,7 @@ public class Repository {
         try {
             Response response;
             Connection c = TableCreator.getConnection();
-            String CreateInSql = "UPDATE labworks SET name = ?, x= ?, y= ?, creation_date= ?, minimalPoint= ?, personalQualitiesMinimum= ?, difficulty= ?, author_name= ?,birthday= ?, weight= ?, eye_color= ? WHERE id = ? and login_id = ?;;";
+            String CreateInSql = "UPDATE labworks SET name = ?, x= ?, y= ?, creation_date= ?, minimalPoint= ?, personalQualitiesMinimum= ?, difficulty= ?, author_name= ?, weight= ?, eye_color= ? WHERE id = ? and login_id = ?;;";
             PreparedStatement stmt = c.prepareStatement(CreateInSql);
             stmt.setString(1, lab.getName());
             stmt.setDouble(2, Double.parseDouble(String.valueOf(lab.getX())));
@@ -353,22 +353,23 @@ public class Repository {
             stmt.setInt(6, lab.getPersonalQualitiesMinimum());
             stmt.setString(7, lab.getDifficulty().toString());
             stmt.setString(8, lab.getName());
+//            try {
+//                stmt.setDate(9, Date.valueOf(lab.getBirthday()));
+//            } catch (NullPointerException e) {
+//                stmt.setDate(9, null);
+//            }
+            stmt.setFloat(9, lab.getWeight());
             try {
-                stmt.setDate(9, Date.valueOf(lab.getBirthday()));
+                stmt.setString(10, lab.getEyeColor());
             } catch (NullPointerException e) {
-                stmt.setDate(9, null);
+                stmt.setDate(10, null);
             }
-            stmt.setFloat(10, lab.getWeight());
-            try {
-                stmt.setString(11, lab.getEyeColor());
-            } catch (NullPointerException e) {
-                stmt.setDate(11, null);
-            }
-            stmt.setInt(12, lab.getId());
-            stmt.setInt(13, GetLoginId.getIdOfLogin(login));
+            stmt.setInt(11, lab.getId());
+            stmt.setInt(12, Integer.parseInt(login));
             stmt.executeUpdate();
             response = new Response("Подходящий элемент обновлен");
             response.setForUpdate();
+            lab.setCreators_id(Integer.parseInt(login));
             response.setCommand("update");
             response.setObjectAnswer(lab);
             return response;

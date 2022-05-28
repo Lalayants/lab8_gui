@@ -185,6 +185,18 @@ public class Session {
             } else if (command.equals("add")){
                 LabWorkDTO dto = (LabWorkDTO) response.getObjectAnswer();
                 getLabModels().add(new LabModel(dto));
+            } else if (command.equals("update")){
+                LabWorkDTO labWorkDTO = (LabWorkDTO) response.getObjectAnswer();
+                int dId = labWorkDTO.getId();
+                LabModel d = null;
+                for (int i = 0; i < getLabModels().size(); i++) {
+                    if (getLabModels().get(i).getId() == dId) {
+                        getLabModels().remove(i);
+                        getLabModels().add(new LabModel(labWorkDTO));
+                        break;
+                    }
+                }
+                getLabModels().remove(d);
             }
         } catch (NullPointerException ignored) {
         }
