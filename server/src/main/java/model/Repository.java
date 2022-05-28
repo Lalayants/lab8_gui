@@ -14,6 +14,8 @@ public class Repository {
     public static Response add(LabWorkDTO a, String login) {
         try {
             LabWorkDTO lab = a;
+            a.setCreators_id(Integer.parseInt(login));
+            a.setCreationDate(Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime()));
 //            Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             Connection c = TableCreator.getConnection();
             String CreateInSql = "INSERT INTO LabWorks(name, x, y, creation_date, minimalPoint, personalQualitiesMinimum, difficulty, author_name,\n" +
@@ -24,11 +26,11 @@ public class Repository {
             stmt.setString(1, lab.getName());
             stmt.setDouble(2, Double.parseDouble(String.valueOf(lab.getX())));
             stmt.setLong(3, lab.getY());
-            stmt.setTimestamp(4, Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime()));
+            stmt.setTimestamp(4, a.getCreationDate());
             stmt.setDouble(5, lab.getMinimalPoint());
             stmt.setInt(6, lab.getPersonalQualitiesMinimum());
-            stmt.setString(7, lab.getDifficulty().toString());
-            stmt.setString(8, lab.getName());
+            stmt.setString(7, lab.getDifficulty());
+            stmt.setString(8, lab.getAuthor());
             try {
                 stmt.setDate(9, Date.valueOf(lab.getBirthday()));
             } catch (NullPointerException e) {
@@ -40,8 +42,18 @@ public class Repository {
             } catch (NullPointerException e) {
                 stmt.setDate(11, null);
             }
-            stmt.setInt(12, GetLoginId.getIdOfLogin(login));
+            stmt.setInt(12, Integer.parseInt(login));
             stmt.executeUpdate();
+
+            stmt = c.prepareStatement("SELECT id\n" +
+                    "FROM labworks\n" +
+                    "WHERE creation_date = (\n" +
+                    "    SELECT MAX(creation_date)\n" +
+                    "    FROM labworks\n" +
+                    ");");
+            ResultSet res = stmt.executeQuery();
+            res.next();
+            a.setId(res.getInt("id"));
             Response r = new Response("Добавлено");
             r.setForUpdate();
             r.setCommand("add");

@@ -58,7 +58,7 @@ public class Session {
             model.setPersonalQualitiesMinimum(a.getPersonalQualitiesMinimum());
             model.setDifficulty(a.getDifficulty());
             model.setAuthor(a.getAuthor());
-            model.setBirthday(a.getBirthday());
+//            model.setBirthday(a.getBirthday());
             model.setWeight(a.getWeight());
             model.setEyeColor(a.getEyeColor());
             model.setCreators_id(a.getCreators_id());
@@ -182,6 +182,9 @@ public class Session {
                     }
                 }
                 getLabModels().removeAll(modelsToDelete);
+            } else if (command.equals("add")){
+                LabWorkDTO dto = (LabWorkDTO) response.getObjectAnswer();
+                getLabModels().add(new LabModel(dto));
             }
         } catch (NullPointerException ignored) {
         }

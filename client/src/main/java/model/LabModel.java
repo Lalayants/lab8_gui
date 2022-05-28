@@ -1,5 +1,6 @@
 package model;
 
+import entity.LabWorkDTO;
 import javafx.beans.property.*;
 
 import java.io.Serializable;
@@ -16,12 +17,12 @@ public class LabModel implements Serializable {
     private IntegerProperty personalQualitiesMinimum; //Поле не может быть null, Значение поля должно быть больше 0
     private StringProperty difficulty; //Поле не может быть null
     private StringProperty author; //Поле не может быть null, Строка не может быть пустой
-    private ObjectProperty<LocalDate> birthday; //Поле может быть null
+    //    private ObjectProperty<LocalDate> birthday; //Поле может быть null
     private FloatProperty weight; //Значение поля должно быть больше 0
     private StringProperty eyeColor; //Поле может быть null
     private IntegerProperty creators_id;
 
-//    public LabModel(LabWorkDTO lab){
+    //    public LabModel(LabWorkDTO lab){
 //        id = new SimpleIntegerProperty(lab.getId());
 //        name = new SimpleStringProperty(lab.getName());
 //        x = new SimpleFloatProperty(lab.getCoordinates().getX());
@@ -36,6 +37,43 @@ public class LabModel implements Serializable {
 //        eyeColor = new SimpleStringProperty(lab.getAuthor().getEyeColor().name());
 //        creators_id = new SimpleIntegerProperty(lab.getCreators_id());
 //    }
+    public LabModel(LabWorkDTO lab){
+        setId(lab.getId());
+        setX(lab.getX());
+        setY(lab.getY());
+        setName(lab.getName());
+        setCreationDate(lab.getCreationDate());
+        setMinimalPoint(lab.getMinimalPoint());
+        setPersonalQualitiesMinimum(lab.getPersonalQualitiesMinimum());
+        setDifficulty(lab.getDifficulty());
+        setAuthor(lab.getAuthor());
+        setWeight(lab.getWeight());
+        try {
+            setEyeColor(lab.getEyeColor());
+        }catch (NullPointerException ignored){}
+        setCreators_id(lab.getCreators_id());
+    }
+    public LabWorkDTO toDTO() {
+        LabWorkDTO labWorkDTO = new LabWorkDTO();
+        labWorkDTO.setName(name.get());
+        labWorkDTO.setX(x.get());
+        labWorkDTO.setY(y.get());
+        labWorkDTO.setMinimalPoint(minimalPoint.get());
+        labWorkDTO.setPersonalQualitiesMinimum(personalQualitiesMinimum.get());
+        labWorkDTO.setDifficulty(difficulty.get());
+        labWorkDTO.setAuthor(author.get());
+        labWorkDTO.setWeight(weight.get());
+        try {
+            labWorkDTO.setId(id.get());
+        }catch (NullPointerException ignored){}
+        try {
+            labWorkDTO.setCreationDate(creationDate.get());
+        }catch (NullPointerException ignored){}
+        try {
+            labWorkDTO.setEyeColor(eyeColor.get());
+        }catch (NullPointerException ignored){}
+        return labWorkDTO;
+    }
 
     public LabModel(IntegerProperty id, StringProperty name, FloatProperty x, LongProperty y, ObjectProperty<Timestamp> creationDate,
                     FloatProperty minimalPoint, IntegerProperty personalQualitiesMinimum, StringProperty difficulty, StringProperty author,
@@ -49,7 +87,7 @@ public class LabModel implements Serializable {
         this.personalQualitiesMinimum = personalQualitiesMinimum;
         this.difficulty = difficulty;
         this.author = author;
-        this.birthday = birthday;
+//        this.birthday = birthday;
         this.weight = weight;
         this.eyeColor = eyeColor;
         this.creators_id = creators_id;
@@ -167,17 +205,17 @@ public class LabModel implements Serializable {
         this.author = new SimpleStringProperty(author);
     }
 
-    public LocalDate getBirthday() {
-        return birthday.get();
-    }
+//    public LocalDate getBirthday() {
+//        return birthday.get();
+//    }
 
-    public ObjectProperty<LocalDate> birthdayProperty() {
-        return birthday;
-    }
+//    public ObjectProperty<LocalDate> birthdayProperty() {
+//        return birthday;
+//    }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = new SimpleObjectProperty<LocalDate>(birthday);
-    }
+//    public void setBirthday(LocalDate birthday) {
+//        this.birthday = new SimpleObjectProperty<LocalDate>(birthday);
+//    }
 
     public float getWeight() {
         return weight.get();
@@ -227,7 +265,7 @@ public class LabModel implements Serializable {
                 ", personalQualitiesMinimum=" + personalQualitiesMinimum +
                 ", difficulty=" + difficulty +
                 ", author=" + author +
-                ", birthday=" + birthday +
+//                ", birthday=" + birthday +
                 ", weight=" + weight +
                 ", eyeColor=" + eyeColor +
                 ", creators_id=" + creators_id +

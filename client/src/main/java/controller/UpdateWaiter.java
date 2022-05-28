@@ -25,10 +25,7 @@ public class UpdateWaiter implements Runnable{
         while (true) {
             try {
                         Response response = (Response) inputStream.readObject();
-                        System.out.println(response.getAnswer());
-                        System.out.println(response.getCommand());
                         session.update(response);
-
             } catch (IOException | NullPointerException | ClassNotFoundException  e) {
                 e.printStackTrace();
             }

@@ -40,7 +40,7 @@ public class Register implements Serializable, Commandable {
              response.setAnswer(id.toString());
             return response;
         } catch (SQLException e) {
-            response.setAnswer("Такой пользователь уже есть в системе, попробуйте другой логин");
+            response.setAnswer("Имя пользователя занято");
             return response;
         }
     }

@@ -1,15 +1,20 @@
 package viewGUI.app;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
 
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Optional;
 
-public class AppController {
+public class AppController{
     private int creators_id;
     @FXML
     private TableView<LabModel> labModelTableView;
@@ -62,6 +67,16 @@ public class AppController {
 
         labModelTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showPersonDetails(newValue));
+
+        labModelTableView.setRowFactory( tv -> {
+            TableRow<LabModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
+                    System.out.println('1');
+                }
+            });
+            return row;
+        });
     }
 
     private void showPersonDetails(LabModel labWork) {
@@ -100,37 +115,45 @@ public class AppController {
             Integer id = Integer.parseInt(idTextField.getText());
             System.out.println(id);
             if (creators_id == LoginWindow.id) {
-//            System.out.println(creators_id == LoginWindow.id);
                 Request request = new Request("remove_by_id", id.toString());
                 LoginWindow.clientN.giveSessionToSent(request);
+                showConfirmationAlert("Успешно", "Удаление записи", "Удаление записи прошло успешно");
             } else {
                 showMistakeAlert("Ошибка", "Ошибка удаления", "Вы не можете удалять чужие работы!");
             }
         }catch (NumberFormatException e){
             showMistakeAlert("Ошибка","Ошибка удаления","Сначала выберите, какую работу удалять!");
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            Scene scene = alert.getDialogPane().getScene();
-//            scene.getRoot().setStyle("-fx-font-family: 'arial'");
-//            alert.initOwner(LoginWindow.prStage);
-//            alert.setTitle("Ошибка");
-//            alert.setHeaderText("Ошибка удаления");
-//            alert.setContentText("Сначала выберите, какую работу удалять!");
-//            alert.showAndWait();
         }
     }
     @FXML
     private void handleClearLabWorks() {
-        LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
-
-
+        if (showConfirmationAlert("Подтверждение", "Подтверждение удаления", "Вы уверены, что хотите удалить все свои записи?"))
+            LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
     }
     @FXML
     private void handleAddLabWork() {
+        showPersonAddDialog();
 
     }
     @FXML
     private void handleEditLabWork() {
 
+    }
+    public void showPersonAddDialog() {
+        try {
+            String fxmlName = "AddDialog";
+            Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxmlName + ".fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Utility");
+            Scene a = new Scene(root1, 380, 400);
+            a.getRoot().setStyle("-fx-font-family: 'arial'");
+            stage.setScene(a);
+            addButton.setDisable(true);
+            stage.showAndWait();
+            addButton.setDisable(false);
+        } catch ( IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void showMistakeAlert(String title, String header, String content){
@@ -142,5 +165,16 @@ public class AppController {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    public static boolean showConfirmationAlert(String title, String header, String content){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Scene scene = alert.getDialogPane().getScene();
+        scene.getRoot().setStyle("-fx-font-family: 'arial'");
+        alert.initOwner(LoginWindow.prStage);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        Optional<ButtonType> res = alert.showAndWait();
+        return res.get() == ButtonType.OK;
     }
 }

@@ -24,6 +24,7 @@ public class ClientN {
     public static void main(String[] args) {
         ClientN cl= new ClientN();
         cl.st();
+        System.exit(0);
     }
 
     public void st(){
@@ -32,7 +33,6 @@ public class ClientN {
         try {
             session.prepareSession(PORT);
             LoginWindow.show(this, session);
-            ConsoleIO.ConsoleOut("Приступайте");
         } catch (IOException  e) {
             ConsoleIO.ConsoleOut("Сервер недоступен");
             session.close();
@@ -54,6 +54,10 @@ public class ClientN {
             session.shutDown();
             shutDown();
         }
+    }
+
+    public void add(){
+
     }
 
     public void remove(Request req){

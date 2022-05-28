@@ -14,6 +14,10 @@ public class Request implements Serializable {
     private String command_name;
     private String login;
     private Object args;
+
+    public Request() {
+
+    }
 //    private Object extra;
 //    private String password;
 
