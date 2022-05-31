@@ -33,7 +33,6 @@
 -->
 
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
@@ -54,7 +53,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewGUI.app.AppController">
+<VBox minHeight="300.0" prefHeight="750.0" prefWidth="804.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewGUI.app.AppController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -95,9 +94,9 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="1300.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" minHeight="300.0" prefHeight="1300.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
       <children>
-            <TabPane fx:id="tabsPane" layoutX="220.0" layoutY="77.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TabPane fx:id="tabsPane" layoutX="220.0" layoutY="77.0" prefHeight="372.5" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
                 <Tab text="Data">
                      <content>
@@ -292,11 +291,6 @@
                                           </Button>
                                        </buttons>
                                     </ButtonBar>
-                                    <Label fx:id="usersLogin" layoutX="247.0" layoutY="5.0" prefHeight="17.0" prefWidth="214.0" text="Label" textFill="#1cdd11">
-                                       <font>
-                                          <Font name="Arial" size="13.0" />
-                                       </font>
-                                    </Label>
                                  </children>
                               </AnchorPane>
                            </items>
@@ -305,10 +299,7 @@
                 </Tab>
                 <Tab text="Map">
                   <content>
-                    <AnchorPane fx:id="tabMap" minHeight="0.0" minWidth="0.0">
-                           <children>
-                              <Canvas fx:id="objectCanvas" focusTraversable="true" height="442.0" onMouseClicked="#mouseClickOnCanvas" width="1000.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children></AnchorPane>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </Tab>
               </tabs>

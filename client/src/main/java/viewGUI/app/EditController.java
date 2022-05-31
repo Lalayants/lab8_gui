@@ -4,8 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -44,7 +42,11 @@ public class EditController implements Initializable {
     }
 
     public void editButtonOnAction() {
-
+        float xPrevious = labModel.getX();
+        long yPrevious = labModel.getY();
+        float weightPrevious = labModel.getWeight();
+        int idPrevious = labModel.getId();
+        int creatorsIdPrevious = labModel.getCreators_id();
         String mistake = "";
         String name = nameField.getText();
         String x = xField.getText();
@@ -97,7 +99,7 @@ public class EditController implements Initializable {
             mistake += "Y должен быть заполнен\n";
         } else {
             try {
-                Long yy = Long.parseLong(y);
+                long yy = Long.parseLong(y);
                 labModel.setY(yy);
             } catch (NumberFormatException e) {
                 mistake += "Y должен быть целым числом\n";
@@ -125,27 +127,20 @@ public class EditController implements Initializable {
         }
 
         if (mistake.isEmpty()) {
+            AppController.listOfX.remove(xPrevious);
+            AppController.listOfCreatorsId.remove((Object)creatorsIdPrevious);
+            AppController.listOfWeight.remove(weightPrevious);
+            AppController.listOfY.remove(yPrevious);
+            AppController.listOfId.remove((Object) idPrevious);
             enteredLabModel = labModel;
             LoginWindow.clientN.giveSessionToSent(new Request("update", enteredLabModel.toDTO()));
             cancelButtonOnAction();
             AppController.showInfoAlert("Успешно", "Редактирование выполнено", "Лабораторная работа отредактирована.");
-
         } else {
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            Scene scene = alert.getDialogPane().getScene();
-//            scene.getRoot().setStyle("-fx-font-family: 'arial'");
-//            alert.initOwner(LoginWindow.prStage);
-//            alert.setTitle("Ошибка");
-//            alert.setHeaderText("Ошибка заполнения");
-//            alert.setContentText(mistake);
-//            alert.showAndWait();
             AppController.showErrorAlert("Ошибка", "Ошибка заполнения", mistake);
         }
     }
 
-    public void updateFieldsForNewLabWork() {
-
-    }
 
 
     public void setPerson() {

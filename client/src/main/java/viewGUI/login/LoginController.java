@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import static java.lang.Thread.sleep;
 
 public class LoginController implements Initializable {
-
+    private static String login;
     @FXML
     private BorderPane rootPane;
     @FXML
@@ -72,10 +72,13 @@ public class LoginController implements Initializable {
     }
 
     public void loadSecond() throws IOException {
+        login ="Ваш логин: "+ usernameTextField.getText();
+        login += " , id=" + String.valueOf(LoginWindow.id);
+        AppController.setLogin(login);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("app.fxml"));
         Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource("app.fxml"));
         Stage stage = LoginWindow.prStage;
-
+        stage.setResizable(true);
         stage.setTitle("App");
         Scene a = new Scene(root1, 1000, 500);
         a.getRoot().setStyle("-fx-font-family: 'arial'");

@@ -138,7 +138,7 @@ public class Session {
 //        setLabModels((ArrayList<LabWorkDTO>) receiveAnswer());
     }
 
-    public void update(Response response) {
+    public void updateCollection(Response response) {
         System.out.println("upd");
         try {
             String command = response.getCommand();
@@ -198,7 +198,7 @@ public class Session {
                 }
                 getLabModels().remove(d);
             }
-        } catch (NullPointerException ignored) {
+        } catch (NullPointerException  ignored) {
         }
     }
 

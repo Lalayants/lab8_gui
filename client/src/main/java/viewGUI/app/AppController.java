@@ -1,24 +1,61 @@
 package viewGUI.app;
 
+import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
 
+import java.awt.event.MouseEvent;
+import java.lang.reflect.*;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Vector;
 
 public class AppController {
     private int creators_id;
+    AnimationTimer loop;
+    private static String login;
+    private Vector<Color> colors = new Vector<>();
+    private Vector<Rect> rectangles = new Vector<>();
+    public static ObservableList<Float> listOfX = FXCollections.observableArrayList();
+    public static ObservableList<Long> listOfY = FXCollections.observableArrayList();
+    public static ObservableList<Integer> listOfId = FXCollections.observableArrayList();
+    public static ObservableList<Float> listOfWeight = FXCollections.observableArrayList();
+    public static ObservableList<Integer> listOfCreatorsId = FXCollections.observableArrayList();
+
+    public static void setLogin(String login) {
+        AppController.login = login;
+    }
+
     private boolean editIsClosed = true;
     private Stage editStage;
     private LabModel activeLabWork;
+    private GraphicsContext graphicsContext;
+    @FXML
+    private AnchorPane tabMap;
+    @FXML
+    private Canvas objectCanvas;
+    @FXML
+    private Label usersLogin;
     @FXML
     private TableView<LabModel> labModelTableView;
     @FXML
@@ -53,6 +90,8 @@ public class AppController {
 
     @FXML
     private void initialize() {
+        usersLogin.setText(login);
+
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().creationDateProperty());
@@ -68,6 +107,58 @@ public class AppController {
 
         labModelTableView.setItems(LoginWindow.session.getLabModels());
 
+        LoginWindow.session.getLabModels().addListener((ListChangeListener<LabModel>) c -> {
+            while (c.next()) {
+                if (c.wasRemoved()) {
+                    for (LabModel removedLabModel : c.getRemoved()) {
+                        System.out.println("remove");
+                        System.out.println(removedLabModel);
+                        System.out.println(removedLabModel.getX());
+                        if (listOfX.contains(removedLabModel.getX()) && listOfX.contains(removedLabModel.getX())&&listOfY.contains(removedLabModel.getY())&&listOfId.contains(removedLabModel.getId())) {
+                            listOfX.remove((Object) removedLabModel.getX());
+                            listOfY.remove((Object) removedLabModel.getY());
+                            listOfWeight.remove((Object) removedLabModel.getWeight());
+                            listOfId.remove((Object) removedLabModel.getId());
+                            listOfCreatorsId.remove((Object) removedLabModel.getCreators_id());
+                        }
+                        System.out.println(listOfX);
+                        System.out.println(listOfY);
+                        System.out.println(listOfId);
+                        System.out.println(listOfWeight);
+                        System.out.println(listOfCreatorsId);
+                    }
+                }
+                if (c.wasAdded()) {
+                    for (LabModel addedLabModel : c.getAddedSubList()) {
+                        System.out.println("add");
+                        listOfX.add(addedLabModel.getX());
+                        listOfY.add(addedLabModel.getY());
+                        listOfWeight.add(addedLabModel.getWeight());
+                        listOfId.add(addedLabModel.getId());
+                        listOfCreatorsId.add(addedLabModel.getCreators_id());
+                        System.out.println(listOfX);
+                        System.out.println(listOfY);
+                        System.out.println(listOfId);
+                        System.out.println(listOfWeight);
+                        System.out.println(listOfCreatorsId);
+                    }
+                }
+                redrawObjects();
+            }
+        });
+
+        for (LabModel item : labModelTableView.getItems()) {
+            listOfX.add(item.getX());
+            listOfY.add(item.getY());
+            listOfId.add(item.getId());
+            listOfWeight.add(item.getWeight());
+            listOfCreatorsId.add(item.getCreators_id());
+        }
+        System.out.println(listOfX);
+        System.out.println(listOfY);
+        System.out.println(listOfId);
+        System.out.println(listOfWeight);
+        System.out.println(listOfCreatorsId);
         labModelTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showPersonDetails(newValue));
 
@@ -78,18 +169,124 @@ public class AppController {
                     if (!editIsClosed) {
                         editStage.close();
                         editIsClosed = true;
-                    }else{
+                    } else {
                         handleEditLabWork();
                     }
                 }
             });
             return row;
         });
+
+        tabMap.widthProperty().addListener((obs, oldVal, newVal) -> {
+            redrawObjects();
+        });
+        tabMap.heightProperty().addListener((obs, oldVal, newVal) -> {
+            redrawObjects();
+        });
+        graphicsContext = objectCanvas.getGraphicsContext2D();
+        graphicsContext.setFont(Font.font("Arial"));
+        Field[] colorsField = Color.class.getDeclaredFields();
+        for (int i = 7; i < colorsField.length - 10; i++) {
+            try {
+                this.colors.add((Color) colorsField[i].get(Color.class));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+    @FXML
+    public void mouseClickOnCanvas(MouseEvent event){
+        System.out.println(event.getX() + event.getY());
+    }
+
+    private void redrawObjects() {
+        redrawPlain();
+//        Vector<Rect> usedRect = new Vector<>();
+//        Vector<Rect> regularObjects = new Vector<>();
+//        Vector<Rect> animatedObjects = new Vector<>();
+        for (int i = 0; i < listOfX.size(); i++) {
+            double sizeHalf = listOfWeight.get(i) / 2;
+            double x = tabMap.getWidth() / 2 + listOfX.get(i) - sizeHalf;
+            double y = tabMap.getHeight() / 2 - listOfY.get(i) - sizeHalf;
+            Rect a = new Rect(x, y, sizeHalf, listOfId.get(i), listOfCreatorsId.get(i));
+            graphicsContext.setFill(colors.get(a.creators_id % colors.size()));
+            graphicsContext.fillRect(a.x, a.y, a.halfSize * 2, a.halfSize * 2);
+            graphicsContext.strokeText(String.valueOf(a.id), a.x, a.y + a.halfSize, a.halfSize * 2);
+//          graphicsContext.setFill(colors.get(listOfCreatorsId.get(i) % colors.size()))so
+//            System.out.println("!!!");
+//            for (Rect r: rectangles){
+//                System.out.println(r.equals(a));
+//            }
+//            System.out.println("!!!!");
+//            if (rectangles.contains(a)) {
+//                System.out.println("содержит");
+//                regularObjects.add(a);
+//            } else {
+//                animatedObjects.add(a);
+//            }
+//        }
+//        if (animatedObjects.isEmpty()) {
+//            for (Rect r : regularObjects) {
+//                System.out.println("1234");
+//                graphicsContext.setFill(colors.get(r.creators_id % colors.size()));
+//                graphicsContext.fillRect(r.x, r.y, r.halfSize * 2, r.halfSize * 2);
+//                graphicsContext.strokeText(String.valueOf(r.id), r.x, r.y + r.halfSize, r.halfSize * 2);
+//            }
+//        } else {
+//            for (Rect r : animatedObjects) {
+//                graphicsContext.setFill(colors.get(r.creators_id % colors.size()));
+//                graphicsContext.fillRect(r.x, r.y, r.halfSize * 2, r.halfSize * 2);
+//                graphicsContext.strokeText(String.valueOf(r.id), r.x, r.y + r.halfSize, r.halfSize * 2);
+//            }
+        }
+//        animatedObjects.addAll(regularObjects);
+//        rectangles.clear();
+//        rectangles.addAll(animatedObjects);
+//        System.out.println(rectangles);
+
+    }
+
+    private void redrawPlain() {
+        objectCanvas.setHeight(tabMap.getHeight());
+        objectCanvas.setWidth(tabMap.getWidth());
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.fillRect(0, 0, tabMap.getWidth(), tabMap.getHeight());
+        graphicsContext.setFill(Color.BLACK);
+//        graphicsContext.strokeLine(0, tabMap.getHeight() / 2 - 100, tabMap.getWidth(), tabMap.getHeight() / 2 - 100);
+//        graphicsContext.strokeLine(tabMap.getWidth() / 2 + 100, 0, tabMap.getWidth() / 2 + 100, tabMap.getHeight());
+        graphicsContext.strokeLine(0, tabMap.getHeight() / 2, tabMap.getWidth(), tabMap.getHeight() / 2);
+        graphicsContext.strokeLine(tabMap.getWidth() / 2, 0, tabMap.getWidth() / 2, tabMap.getHeight());
+        graphicsContext.strokeLine(tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 - 5, tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 + 5);
+        graphicsContext.strokeText("10", tabMap.getWidth() / 2 + 3, tabMap.getHeight() / 2 + 18);
+    }
+
+    private void startAnimation(double x0, double x1, double y) {
+
+        loop = new AnimationTimer() {
+
+            double startX = 100;
+            double endX = 200;
+            double y = 100;
+            double x = startX;
+            double speed = 1;
+
+            @Override
+            public void handle(long now) {
+                graphicsContext.fillOval(x, y, 5, 5);
+                x += speed;
+                if (x >= endX) {
+                    loop.stop();
+                }
+            }
+        };
+        loop.start();
     }
 
     @FXML
     private void handleEditLabWork() {
         try {
+            System.out.println(listOfX);
             Integer id = Integer.parseInt(idTextField.getText());
             if (creators_id == LoginWindow.id) {
                 EditController.setLab(activeLabWork);
@@ -167,8 +364,9 @@ public class AppController {
 
     @FXML
     private void handleClearLabWorks() {
-        if (showConfirmationAlert("Подтверждение", "Подтверждение удаления", "Вы уверены, что хотите удалить все свои записи?"))
+        if (showConfirmationAlert("Подтверждение", "Подтверждение удаления", "Вы уверены, что хотите удалить все свои записи?")) {
             LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
+        }
     }
 
     @FXML
@@ -225,5 +423,33 @@ public class AppController {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private class Rect {
+        //        public Rectangle rectangle;
+        public Double x;
+        public Double y;
+        public Double halfSize;
+        public int id;
+        public int creators_id;
+
+        @Override
+        public boolean equals(Object o) {
+            Rect rect = (Rect) o;
+            return id == rect.id && creators_id == rect.creators_id && x.equals(rect.x) && y.equals(rect.y) && halfSize.equals(rect.halfSize);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y, halfSize, id, creators_id);
+        }
+
+        public Rect(Double x, Double y, Double halfSize, int id, int creators_id) {
+            this.x = x;
+            this.y = y;
+            this.halfSize = halfSize;
+            this.id = id;
+            this.creators_id = creators_id;
+        }
     }
 }
