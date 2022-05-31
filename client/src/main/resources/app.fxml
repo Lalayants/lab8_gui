@@ -307,7 +307,7 @@
                   <content>
                     <AnchorPane fx:id="tabMap" minHeight="0.0" minWidth="0.0">
                            <children>
-                              <Canvas fx:id="objectCanvas" focusTraversable="true" height="442.0" onMouseClicked="#mouseClickOnCanvas" width="1000.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Canvas fx:id="objectCanvas" focusTraversable="true" height="442.0" width="1000.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children></AnchorPane>
                   </content>
                 </Tab>
