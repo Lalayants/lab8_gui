@@ -139,10 +139,8 @@ public class Session {
     }
 
     public void updateCollection(Response response) {
-        System.out.println("upd");
         try {
             String command = response.getCommand();
-            System.out.println(command);
             if (command.equals("show")) {
                 setLabModels((ArrayList<LabWorkDTO>) response.getObjectAnswer());
             } else if (command.equals("login")) {
