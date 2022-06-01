@@ -99,7 +99,7 @@
       <children>
             <TabPane fx:id="tabsPane" layoutX="220.0" layoutY="77.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
-                <Tab text="Data">
+                <Tab text="%dataTab">
                      <content>
                         <SplitPane dividerPositions="0.5" prefHeight="400.0" prefWidth="1000.0">
                            <items>
@@ -107,18 +107,18 @@
                                  <children>
                                     <TableView fx:id="labModelTableView" layoutX="92.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <columns>
-                                          <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" />
-                                          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
-                                          <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
-                                          <TableColumn prefWidth="75.0" text="x" fx:id="xColumn" />
-                                          <TableColumn fx:id="yColumn" prefWidth="75.0" text="y" />
-                                          <TableColumn fx:id="minimalPointColumn" prefWidth="75.0" text="Minimal Point" />
-                                          <TableColumn fx:id="personalPointColumn" prefWidth="75.0" text="Personal Point" />
-                                          <TableColumn fx:id="difficultyColumn" prefWidth="75.0" text="Difficulty" />
-                                          <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Author" />
-                                          <TableColumn fx:id="weightColumn" prefWidth="75.0" text="Weight" />
-                                          <TableColumn fx:id="eyeColorColumn" prefWidth="75.0" text="Eye Color" />
-                                          <TableColumn fx:id="creatorsIdColumn" prefWidth="75.0" text="Creator's id" />
+                                          <TableColumn fx:id="idColumn" prefWidth="75.0" text="%idColumn" />
+                                          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="%nameColumn" />
+                                          <TableColumn fx:id="dateColumn" prefWidth="75.0" text="%dateColumn" />
+                                          <TableColumn prefWidth="75.0" text="%xColumn" fx:id="xColumn" />
+                                          <TableColumn fx:id="yColumn" prefWidth="75.0" text="%yColumn" />
+                                          <TableColumn fx:id="minimalPointColumn" prefWidth="75.0" text="%minPointColumn" />
+                                          <TableColumn fx:id="personalPointColumn" prefWidth="75.0" text="%personalPointColumn" />
+                                          <TableColumn fx:id="difficultyColumn" prefWidth="75.0" text="%difficultyColumn" />
+                                          <TableColumn fx:id="authorColumn" prefWidth="75.0" text="%authorColumn" />
+                                          <TableColumn fx:id="weightColumn" prefWidth="75.0" text="%weightColumn" />
+                                          <TableColumn fx:id="eyeColorColumn" prefWidth="75.0" text="%colorColumn" />
+                                          <TableColumn fx:id="creatorsIdColumn" prefWidth="75.0" text="%creatorsIdColumn" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -148,57 +148,57 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <Label text="Name" GridPane.rowIndex="1">
+                                          <Label text="%nameDetails" GridPane.rowIndex="1">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label contentDisplay="CENTER" layoutX="123.0" layoutY="17.0" text="x" GridPane.rowIndex="2">
+                                          <Label contentDisplay="CENTER" layoutX="123.0" layoutY="17.0" text="%xDetails" GridPane.rowIndex="2">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="17.0" text="y" GridPane.rowIndex="3">
+                                          <Label layoutX="10.0" layoutY="17.0" text="%yDetails" GridPane.rowIndex="3">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="77.0" text="Date" GridPane.rowIndex="4">
+                                          <Label layoutX="10.0" layoutY="77.0" text="%dateDetails" GridPane.rowIndex="4">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="17.0" text="Minimal point" GridPane.rowIndex="5">
+                                          <Label layoutX="10.0" layoutY="17.0" text="%minimalPointDetails" GridPane.rowIndex="5">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="137.0" text="Personal point" GridPane.rowIndex="6">
+                                          <Label layoutX="10.0" layoutY="137.0" text="%personalPointDetails" GridPane.rowIndex="6">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="167.0" text="Difficulty" GridPane.rowIndex="7">
+                                          <Label layoutX="10.0" layoutY="167.0" text="%difficultyDetails" GridPane.rowIndex="7">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="197.0" text="Author" GridPane.rowIndex="8">
+                                          <Label layoutX="10.0" layoutY="197.0" text="%authorDetails" GridPane.rowIndex="8">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="17.0" text="Weight" GridPane.rowIndex="9">
+                                          <Label layoutX="10.0" layoutY="17.0" text="%weightDetails" GridPane.rowIndex="9">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="10.0" layoutY="17.0" text="Eye Colour" GridPane.rowIndex="10">
+                                          <Label layoutX="10.0" layoutY="17.0" text="%eyeColorDetails" GridPane.rowIndex="10">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="89.0" layoutY="47.0" text="id">
+                                          <Label layoutX="89.0" layoutY="47.0" text="%idDetails">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
@@ -263,29 +263,29 @@
                                           <Cursor fx:constant="TEXT" />
                                        </cursor>
                                     </GridPane>
-                                    <Label fx:id="qwert" layoutX="8.0" layoutY="14.0" text="LabWork details" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                    <Label fx:id="qwert" layoutX="8.0" layoutY="14.0" text="%labWorkDetails" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <font>
                                           <Font name="Arial" size="13.0" />
                                        </font>
                                     </Label>
                                     <ButtonBar layoutX="59.0" layoutY="397.0" prefHeight="40.0" prefWidth="159.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="15.0">
                                        <buttons>
-                                          <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditLabWork" text="Edit">
+                                          <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditLabWork" text="%editButton">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddLabWork" text="Add">
+                                          <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddLabWork" text="%addButton">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleDeleteLabWork" text="Remove">
+                                          <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleDeleteLabWork" text="%removeButton">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="removeButton1" layoutX="316.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleClearLabWorks" text="Clear">
+                                          <Button fx:id="removeButton1" layoutX="316.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleClearLabWorks" text="%clearButton">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>
@@ -303,7 +303,7 @@
                         </SplitPane>
                      </content>
                 </Tab>
-                <Tab text="Map">
+                <Tab text="%mapTab">
                   <content>
                     <AnchorPane fx:id="tabMap" minHeight="0.0" minWidth="0.0">
                            <children>

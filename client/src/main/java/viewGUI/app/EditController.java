@@ -57,93 +57,100 @@ public class EditController implements Initializable {
         String minimalPoint = minimalPointField.getText();
         String difficulty = difficultyChoice.getValue();
         String eyeColor = eyeColorChoice.getValue();
-        if (name == null) {
-            mistake += "Имя должно быть заполнено\n";
+        if (name == null || name.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("nameFillError");
         } else {
             labModel.setName(name);
         }
-        if (difficulty == null) {
-            mistake += "Сложность должна быть заполнено\n";
+        if (difficulty == null||difficulty.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("difficultyFillError");
         } else {
-            labModel.setDifficulty(difficulty.toUpperCase());
+            labModel.setDifficulty(difficulty);
         }
-        if (eyeColor != null) {
+        if (eyeColor  != null) {
             labModel.setEyeColor(eyeColor);
         }
-        if (author == null) {
-            mistake += "Автор должен быть заполнен\n";
+        if (author == null || author.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("authorFillError");
         } else {
             labModel.setAuthor(author);
         }
-        if (x == null) {
-            mistake += "X должен быть заполнен\n";
+        if (x  == null || x.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("xFillError");
         } else {
             try {
                 float xx = Float.parseFloat(x);
                 labModel.setX(xx);
             } catch (NumberFormatException e) {
-                mistake += "X должен быть десятичной дробью с точкой разделителем\n";
+                mistake += LoginWindow.resourceBundle.getString("xFillError");
             }
         }
-        if (weight == null) {
-            mistake += "Вес должен быть заполнен\n";
+        if (weight == null|| weight.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("weightFillError");
         } else {
             try {
                 float wght = Float.parseFloat(weight);
                 labModel.setWeight(wght);
             } catch (NumberFormatException e) {
-                mistake += "Вес должен быть десятичной дробью с точкой разделителем\n";
+                mistake += LoginWindow.resourceBundle.getString("weightFillError");
             }
         }
-        if (y == null) {
-            mistake += "Y должен быть заполнен\n";
+        if (y == null || y.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("yFillError");
         } else {
             try {
-                long yy = Long.parseLong(y);
+                Long yy = Long.parseLong(y);
                 labModel.setY(yy);
             } catch (NumberFormatException e) {
-                mistake += "Y должен быть целым числом\n";
+                mistake += LoginWindow.resourceBundle.getString("yFillError");
             }
         }
-        if (personalPoint == null) {
-            mistake += "Личный балл должен быть заполнен\n";
+        if (personalPoint == null || personalPoint.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("personalPointFillError");
         } else {
             try {
                 int persPoint = Integer.parseInt(personalPoint);
                 labModel.setPersonalQualitiesMinimum(persPoint);
             } catch (NumberFormatException e) {
-                mistake += "Личный балл должен быть целым числом\n";
+                mistake += LoginWindow.resourceBundle.getString("personalPointFillError");
             }
         }
-        if (minimalPoint == null) {
-            mistake += "Минимальный балл должен быть заполнен\n";
+        if (minimalPoint == null || minimalPoint.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("minimalPointFillError");
         } else {
             try {
                 float minPoint = Float.parseFloat(minimalPoint);
                 labModel.setMinimalPoint(minPoint);
             } catch (NumberFormatException e) {
-                mistake += "Минимальный балл должен быть десятичной дробью с точкой разделителем\n";
+                mistake += LoginWindow.resourceBundle.getString("minimalPointFillError");
             }
         }
 
         if (mistake.isEmpty()) {
-            AppController.listOfX.remove(xPrevious);
-            AppController.listOfCreatorsId.remove((Object)creatorsIdPrevious);
-            AppController.listOfWeight.remove(weightPrevious);
-            AppController.listOfY.remove(yPrevious);
-            AppController.listOfId.remove((Object) idPrevious);
+            int index = AppController.listOfId.indexOf(xPrevious);
+            AppController.listOfX.remove(index);
+            AppController.listOfY.remove(index);
+            AppController.listOfId.remove(index);
+            AppController.listOfWeight.remove(index);
+            AppController.listOfCreatorsId.remove(index);
+//            AppController.listOfX.remove(xPrevious);
+//            AppController.listOfCreatorsId.remove((Object)creatorsIdPrevious);
+//            AppController.listOfWeight.remove(weightPrevious);
+//            AppController.listOfY.remove(yPrevious);
+//            AppController.listOfId.remove((Object) idPrevious);
             enteredLabModel = labModel;
             LoginWindow.clientN.giveSessionToSent(new Request("update", enteredLabModel.toDTO()));
             cancelButtonOnAction();
-            AppController.showInfoAlert("Успешно", "Редактирование выполнено", "Лабораторная работа отредактирована.");
+            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("successOfEdit"), LoginWindow.resourceBundle.getString("successOfEditMessage"));
         } else {
-            AppController.showErrorAlert("Ошибка", "Ошибка заполнения", mistake);
+            AppController.showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("LabWorkFillError"), mistake);
         }
     }
 
 
 
     public void setPerson() {
+
         difficultyChoice.setItems(difficulties);
         eyeColorChoice.setItems(colors);
         nameField.setText(labModel.getName());
@@ -159,5 +166,6 @@ public class EditController implements Initializable {
 
     public static void setLab(LabModel l) {
         labModel = l;
+        System.out.println(l);
     }
 }

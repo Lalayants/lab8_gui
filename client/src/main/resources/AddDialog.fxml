@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.202" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewGUI.app.AddController">
+<AnchorPane prefHeight="500.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewGUI.app.AddController">
 <children><GridPane layoutX="-16.0" layoutY="31.0" prefHeight="280.0" prefWidth="360.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="120.0" />
@@ -28,39 +28,39 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
-<children><Label text="Name">
+<children><Label text="%nameDetails">
                <font>
                   <Font name="Arial" size="13.0" />
                </font></Label><TextField fx:id="nameField" GridPane.columnIndex="1">
                <font>
                   <Font name="Arial" size="13.0" />
-               </font></TextField><Label text="x" GridPane.rowIndex="1">
+               </font></TextField><Label text="%xDetails" GridPane.rowIndex="1">
                <font>
                   <Font name="Arial" size="13.0" />
-               </font></Label><Label text="y" GridPane.rowIndex="2">
+               </font></Label><Label text="%yDetails" GridPane.rowIndex="2">
                <font>
                   <Font name="Arial" size="13.0" />
-               </font></Label><Label text="Minimal Point" GridPane.rowIndex="3">
+               </font></Label><Label text="%minimalPointDetails" GridPane.rowIndex="3">
                <font>
                   <Font name="Arial" size="13.0" />
-               </font></Label><Label text="Personal Point" GridPane.rowIndex="4">
+               </font></Label><Label text="%personalPointDetails" GridPane.rowIndex="4">
                <font>
                   <Font name="Arial" size="13.0" />
-               </font></Label><Label text="Difficulty" GridPane.rowIndex="5">
+               </font></Label><Label text="%difficultyDetails" GridPane.rowIndex="5">
                <font>
                   <Font name="Arial" size="13.0" />
                </font></Label>
-            <Label layoutX="10.0" layoutY="13.0" text="Author" GridPane.rowIndex="6">
+            <Label layoutX="10.0" layoutY="13.0" text="%authorDetails" GridPane.rowIndex="6">
                <font>
                   <Font name="Arial" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="145.0" text="Weight" GridPane.rowIndex="7">
+            <Label layoutX="10.0" layoutY="145.0" text="%weightDetails" GridPane.rowIndex="7">
                <font>
                   <Font name="Arial" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="13.0" text="Eye Color" GridPane.rowIndex="8">
+            <Label layoutX="10.0" layoutY="13.0" text="%eyeColorDetails" GridPane.rowIndex="8">
                <font>
                   <Font name="Arial" size="13.0" />
                </font>
@@ -100,7 +100,7 @@
 </children>
 </GridPane>
 <HBox layoutX="197.1875" layoutY="241.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
-<children><Button layoutX="197.1875" layoutY="241.0" mnemonicParsing="false" onAction="#getLabWork" prefWidth="90.0" text="Add" /><Button layoutX="249.375" layoutY="241.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefWidth="90.0" text="Cancel" />
+<children><Button layoutX="197.1875" layoutY="241.0" mnemonicParsing="false" onAction="#getLabWork" prefWidth="90.0" text="%addButton" /><Button layoutX="249.375" layoutY="241.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefWidth="90.0" text="%cancelButton" />
 </children>
 </HBox>
 </children></AnchorPane>

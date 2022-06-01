@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,7 +25,7 @@ import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
 
-import java.awt.event.MouseEvent;
+
 import java.lang.reflect.*;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -115,11 +118,17 @@ public class AppController {
                         System.out.println(removedLabModel);
                         System.out.println(removedLabModel.getX());
                         if (listOfX.contains(removedLabModel.getX()) && listOfX.contains(removedLabModel.getX())&&listOfY.contains(removedLabModel.getY())&&listOfId.contains(removedLabModel.getId())) {
-                            listOfX.remove((Object) removedLabModel.getX());
-                            listOfY.remove((Object) removedLabModel.getY());
-                            listOfWeight.remove((Object) removedLabModel.getWeight());
-                            listOfId.remove((Object) removedLabModel.getId());
-                            listOfCreatorsId.remove((Object) removedLabModel.getCreators_id());
+                            int index = listOfId.indexOf(removedLabModel.getId());
+                            listOfX.remove(index);
+                            listOfY.remove(index);
+                            listOfId.remove(index);
+                            listOfWeight.remove(index);
+                            listOfCreatorsId.remove(index);
+//                            listOfX.remove((Object) removedLabModel.getX());
+//                            listOfY.remove((Object) removedLabModel.getY());
+//                            listOfWeight.remove((Object) removedLabModel.getWeight());
+//                            listOfId.remove((Object) removedLabModel.getId());
+//                            listOfCreatorsId.remove((Object) removedLabModel.getCreators_id());
                         }
                         System.out.println(listOfX);
                         System.out.println(listOfY);
@@ -194,11 +203,32 @@ public class AppController {
             }
 
         }
+
+        objectCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        System.out.println(e.getX() + " " + e.getY());
+                        ObservableList<LabModel> list = labModelTableView.getItems();
+                        boolean done = false;
+                        for (LabModel lab : list){
+                            if (e.getX() < tabMap.getWidth() / 2 + lab.getX() + lab.getWeight()/2 &&e.getX() > tabMap.getWidth() / 2 + lab.getX() - lab.getWeight()/2)
+                                if (e.getY() > tabMap.getHeight() / 2 - lab.getY() - lab.getWeight()/2 && e.getY() < tabMap.getHeight() / 2 - lab.getY() + lab.getWeight()/2) {
+                                    showPersonDetails(lab);
+                                    if (e.getButton().equals(MouseButton.PRIMARY) ) {
+                                        handleEditLabWork();
+                                        break;
+                                    } else if(e.getButton().equals(MouseButton.SECONDARY)){
+                                        handleDeleteLabWork();
+                                        break;
+                                    }
+                                }
+                        }
+
+                    }
+                });
     }
-    @FXML
-    public void mouseClickOnCanvas(MouseEvent event){
-        System.out.println(event.getX() + event.getY());
-    }
+
 
     private void redrawObjects() {
         redrawPlain();
@@ -290,11 +320,11 @@ public class AppController {
             Integer id = Integer.parseInt(idTextField.getText());
             if (creators_id == LoginWindow.id) {
                 EditController.setLab(activeLabWork);
-                String fxmlName = "EditDialog";
-                Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxmlName + ".fxml"));
+                String fxmlName = "LabWorkEditDialog";
+                Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource( "EditDialog.fxml"), LoginWindow.resourceBundle);
                 Stage stage = new Stage();
                 editStage = stage;
-                stage.setTitle("Edit Utility");
+                stage.setTitle(LoginWindow.resourceBundle.getString("editUtility"));
                 Scene a = new Scene(root1, 380, 400);
                 a.getRoot().setStyle("-fx-font-family: 'arial'");
                 stage.setScene(a);
@@ -304,12 +334,12 @@ public class AppController {
                 editButton.setDisable(false);
                 editIsClosed = true;
             } else {
-                showErrorAlert("Ошибка", "Ошибка редактирования", "Вы не можете редактировать чужие работы!");
+                showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("LabWorkEditError"), LoginWindow.resourceBundle.getString("LabWorkEditErrorNotYours"));
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {
-            showErrorAlert("Ошибка", "Ошибка редактирования", "Сначала выберите, какую работу редактировать!");
+            showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("LabWorkEditError"), LoginWindow.resourceBundle.getString("LabWorkEditErrorNotSpecified"));
         }
     }
 
@@ -353,18 +383,18 @@ public class AppController {
             if (creators_id == LoginWindow.id) {
                 Request request = new Request("remove_by_id", id.toString());
                 LoginWindow.clientN.giveSessionToSent(request);
-                showInfoAlert("Успешно", "Удаление записи", "Удаление записи прошло успешно");
+                showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("labWorkRemove"), LoginWindow.resourceBundle.getString("labWorkRemoveSuccess"));
             } else {
-                showErrorAlert("Ошибка", "Ошибка удаления", "Вы не можете удалять чужие работы!");
+                showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("labWorkRemove"), LoginWindow.resourceBundle.getString("labWorkRemoveError"));
             }
         } catch (NumberFormatException e) {
-            showErrorAlert("Ошибка", "Ошибка удаления", "Сначала выберите, какую работу удалять!");
+            showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("labWorkRemove"), LoginWindow.resourceBundle.getString("labWorkRemoveErrorNotSpecified"));
         }
     }
 
     @FXML
     private void handleClearLabWorks() {
-        if (showConfirmationAlert("Подтверждение", "Подтверждение удаления", "Вы уверены, что хотите удалить все свои записи?")) {
+        if (showConfirmationAlert(LoginWindow.resourceBundle.getString("confirmation"), LoginWindow.resourceBundle.getString("confirmationOfClear"), LoginWindow.resourceBundle.getString("confirmationOfClearMessage"))) {
             LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
         }
     }
@@ -377,9 +407,9 @@ public class AppController {
     public void showPersonAddDialog() {
         try {
             String fxmlName = "AddDialog";
-            Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxmlName + ".fxml"));
+            Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxmlName + ".fxml"), LoginWindow.resourceBundle);
             Stage stage = new Stage();
-            stage.setTitle("Add Utility");
+            stage.setTitle(LoginWindow.resourceBundle.getString("addUtility"));
             Scene a = new Scene(root1, 380, 400);
             a.getRoot().setStyle("-fx-font-family: 'arial'");
             stage.setScene(a);

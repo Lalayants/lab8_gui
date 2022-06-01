@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddController implements Initializable {
-    ObservableList<String> difficulties = FXCollections.observableArrayList("Hard", "Terrible", "Insane");
+    ObservableList<String> difficulties = FXCollections.observableArrayList("HARD", "TERRIBLE", "INSANE");
     ObservableList<String> colors = FXCollections.observableArrayList("BLACK", "BLUE", "YELLOW", "ORANGE", "BROWN");
     public LabModel enteredLabModel;
     @FXML
@@ -51,72 +51,72 @@ public class AddController implements Initializable {
         String minimalPoint = minimalPointField.getText();
         String difficulty = (String) difficultyChoice.getValue();
         String eyeColor = (String) eyeColorChoice.getValue();
-        if (name == null) {
-            mistake += "Имя должно быть заполнено\n";
+        if (name == null || name.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("nameFillError");
         } else {
             labModel.setName(name);
         }
-        if (difficulty == null) {
-            mistake += "Сложность должна быть заполнено\n";
+        if (difficulty == null||difficulty.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("difficultyFillError");
         } else {
             labModel.setDifficulty(difficulty);
         }
         if (eyeColor  != null) {
             labModel.setEyeColor(eyeColor);
         }
-        if (author == null) {
-            mistake += "Автор должен быть заполнен\n";
+        if (author == null || author.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("authorFillError");
         } else {
             labModel.setAuthor(author);
         }
-        if (x  == null) {
-            mistake += "X должен быть заполнен\n";
+        if (x  == null || x.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("xFillError");
         } else {
             try {
                 float xx = Float.parseFloat(x);
                 labModel.setX(xx);
             } catch (NumberFormatException e) {
-                mistake += "X должен быть десятичной дробью с точкой разделителем\n";
+                mistake += LoginWindow.resourceBundle.getString("xFillError");
             }
         }
-        if (weight == null) {
-            mistake += "Вес должен быть заполнен\n";
+        if (weight == null|| weight.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("weightFillError");
         } else {
             try {
                 float wght = Float.parseFloat(weight);
                 labModel.setWeight(wght);
             } catch (NumberFormatException e) {
-                mistake += "Вес должен быть десятичной дробью с точкой разделителем\n";
+                mistake += LoginWindow.resourceBundle.getString("weightFillError");
             }
         }
-        if (y == null) {
-            mistake += "Y должен быть заполнен\n";
+        if (y == null || y.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("yFillError");
         } else {
             try {
                 Long yy = Long.parseLong(y);
                 labModel.setY(yy);
             } catch (NumberFormatException e) {
-                mistake += "Y должен быть целым числом\n";
+                mistake += LoginWindow.resourceBundle.getString("yFillError");
             }
         }
-        if (personalPoint == null) {
-            mistake += "Личный балл должен быть заполнен\n";
+        if (personalPoint == null || personalPoint.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("personalPointFillError");
         } else {
             try {
                 int persPoint = Integer.parseInt(personalPoint);
                 labModel.setPersonalQualitiesMinimum(persPoint);
             } catch (NumberFormatException e) {
-                mistake += "Личный балл должен быть целым числом\n";
+                mistake += LoginWindow.resourceBundle.getString("personalPointFillError");
             }
         }
-        if (minimalPoint == null) {
-            mistake += "Минимальный балл должен быть заполнен\n";
+        if (minimalPoint == null || minimalPoint.isEmpty()) {
+            mistake += LoginWindow.resourceBundle.getString("minimalPointFillError");
         } else {
             try {
                 float minPoint = Float.parseFloat(minimalPoint);
                 labModel.setMinimalPoint(minPoint);
             } catch (NumberFormatException e) {
-                mistake += "Минимальный балл должен быть десятичной дробью с точкой разделителем\n";
+                mistake += LoginWindow.resourceBundle.getString("minimalPointFillError");
             }
         }
 
@@ -129,8 +129,8 @@ public class AddController implements Initializable {
             Scene scene = alert.getDialogPane().getScene();
             scene.getRoot().setStyle("-fx-font-family: 'arial'");
             alert.initOwner(LoginWindow.prStage);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Ошибка заполнения");
+            alert.setTitle(LoginWindow.resourceBundle.getString("error"));
+            alert.setHeaderText(LoginWindow.resourceBundle.getString("LabWorkFillError"));
             alert.setContentText(mistake);
             alert.showAndWait();
         }
