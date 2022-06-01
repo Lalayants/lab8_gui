@@ -1,6 +1,7 @@
 package controller.commands;
 
 import model.Repository;
+import requests.Response;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  */
 public class PrintUniqueMinimalPoint implements Serializable, Commandable {
     @Override
-    public String execute(Object o, String login) {
+    public Response execute(Object o, String login) {
         return Repository.getUniqueMinimalPoint();
     }
 

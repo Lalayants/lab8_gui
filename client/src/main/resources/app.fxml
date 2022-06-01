@@ -145,7 +145,6 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
                                           <Label text="%nameDetails" GridPane.rowIndex="1">
@@ -297,6 +296,20 @@
                                           <Font name="Arial" size="13.0" />
                                        </font>
                                     </Label>
+                                    <ButtonBar layoutX="14.0" layoutY="360.0" prefHeight="40.0" prefWidth="159.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="15.0">
+                                       <buttons>
+                                          <Button fx:id="uniqueMinimalPoint" mnemonicParsing="false" onAction="#showUniMinimalPoint" text="%uniqueMinimalPointButton">
+                                             <font>
+                                                <Font name="Arial" size="13.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="lessThanMinimalPointButton" mnemonicParsing="false" onAction="#countLessThanMinimalPoint" prefHeight="25.0" text="%countLessThanMinimalPointButton">
+                                             <font>
+                                                <Font name="Arial" size="13.0" />
+                                             </font>
+                                          </Button>
+                                       </buttons>
+                                    </ButtonBar>
                                  </children>
                               </AnchorPane>
                            </items>

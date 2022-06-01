@@ -1,6 +1,7 @@
 package controller.commands;
 
 import model.Repository;
+import requests.Response;
 
 import java.io.Serializable;
 
@@ -13,14 +14,11 @@ import java.io.Serializable;
  */
 public class CountLessThanMinimalPoint implements Serializable, Commandable {
     @Override
-    public String execute(Object o, String login) {
-        try {
-            int ref = Integer.parseInt((String) o);
+    public Response execute(Object o, String login) {
+            Double ref = (Double) o;
 //          Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             return Repository.CountLessThanMinimalPoint(ref);
-        } catch(NumberFormatException e){
-            return "MinimalPoint должен быть целым числом";
-        }
+
 
     }
 

@@ -82,6 +82,9 @@ public class Bundle_en_AU extends ListResourceBundle {
                 {"removeLowerAnswerSuccess", "Elements are deleted"},
                 {"AddIfMinAnswerNotMin", "Entered element is not minimal"},
                 {"AddSuccess", "Element successfully added"},
+                {"uniqueMinimalPointButton", "Unique Min Point"},
+                {"countLessThanMinimalPointButton", "Count less than minimal point"},
+                {"getUniqueMinimalPointAnswerEmpty", "Collection is empty"},
 
 
 

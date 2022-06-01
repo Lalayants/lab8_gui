@@ -123,22 +123,25 @@ public class Repository {
         }
     }
 
-    public static String CountLessThanMinimalPoint(int min) {
+    public static Response CountLessThanMinimalPoint(double min) {
+        Response r = new Response("");
+        r.setCommand("count_less_than_minimal_point");
         try {
             Connection c = TableCreator.getConnection();
 //            Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             String CreateInSql = "select minimalpoint from labworks " +
                     "where minimalpoint<?;";
             PreparedStatement stmt = c.prepareStatement(CreateInSql);
-            stmt.setInt(1, min);
+            stmt.setDouble(1, min);
             ResultSet res = stmt.executeQuery();
-            int counter = 0;
+            Integer counter = 0;
             while (res.next()) {
                 counter += 1;
             }
-            return ("Таких " + counter);
+            r.setAnswer(counter.toString());
+            return r;
         } catch (SQLException e) {
-            return "Что-то пошло не так";
+            return new Response("Что-то пошло не так");
         }
     }
 
@@ -246,7 +249,9 @@ public class Repository {
             return "========================\n\n" + "Коллекция пуста\n\n" + "========================\n";
     }
 
-    public static String getUniqueMinimalPoint() {
+    public static Response getUniqueMinimalPoint() {
+        Response response = new Response("getUniqueMinimalPointAnswerEmpty");
+        response.setCommand("print_unique_minimal_point");
         try {
             Connection c = TableCreator.getConnection();
             String CreateInSql = "select minimalpoint from labworks"; //distinct
@@ -258,12 +263,14 @@ public class Repository {
                 if (!a.contains(k))
                     a.add(k);
             }
-            if (a.size() != 0)
-                return a.toString().replace("[", "").replace("]", "");
+            if (a.size() != 0) {
+                response.setAnswer(a.toString().replace("[", "").replace("]", ""));
+                return response;
+            }
             else
-                return "Коллекция пуста";
+                return response;
         } catch (SQLException e) {
-            return "Коллекция пуста";
+            return response;
         }
     }
 

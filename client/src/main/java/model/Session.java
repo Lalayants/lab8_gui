@@ -218,6 +218,10 @@ public class Session {
                 }
             }else if(command.equals("add_if_min")){
                 messageForClient = response.getAnswer();
+            }else if(command.equals("print_unique_minimal_point")){
+                messageForClient = response.getAnswer();
+            }else if(command.equals("count_less_than_minimal_point")){
+                messageForClient = response.getAnswer();
             }
         } catch (NullPointerException  ignored) {
         }

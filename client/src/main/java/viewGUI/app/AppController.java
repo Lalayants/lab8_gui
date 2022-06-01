@@ -420,6 +420,40 @@ public class AppController {
             e.printStackTrace();
         }
     }
+    public void showUniMinimalPoint(){
+        LoginWindow.clientN.giveSessionToSent(new Request("print_unique_minimal_point", ""));
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (LoginWindow.session.messageForClient.equals("getUniqueMinimalPointAnswerEmpty"))
+        AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("uniqueMinimalPointButton"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+        else
+            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("uniqueMinimalPointButton"), LoginWindow.session.messageForClient);
+
+
+    }
+    public  void countLessThanMinimalPoint(){
+        try {
+            Double minP = Double.valueOf(minimalPointTextField.getText());
+            if (minP == null)
+                throw new NumberFormatException();
+            else {
+                LoginWindow.clientN.giveSessionToSent(new Request("count_less_than_minimal_point", minP));
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.session.messageForClient);
+
+            }
+        }catch (NumberFormatException e){
+            showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.resourceBundle.getString("minimalPointFillError"));
+        }
+
+    }
 
     public static void showErrorAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
