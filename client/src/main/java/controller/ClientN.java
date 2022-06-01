@@ -28,8 +28,6 @@ public class ClientN {
     }
 
     public void st(){
-        ConsoleIO.ConsoleOut("Client app for Lab8 v53490 by Kirill Lalayants R3137 2022 \nApp Started");
-        ConsoleIO.ConsoleOut("Postavte ball, pls");
         try {
             session.prepareSession(PORT);
             LoginWindow.show(this, session);

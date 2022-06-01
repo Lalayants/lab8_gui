@@ -17,7 +17,6 @@ public class Login implements Serializable, Commandable {
         response.setCommand("login");
         try {
             String[] data = ((String) o).split(" ");
-//            Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             Connection c = TableCreator.getConnection();
             String registration = "select * from Users where login = ? AND password = ?";
             PreparedStatement stmt = c.prepareStatement(registration);

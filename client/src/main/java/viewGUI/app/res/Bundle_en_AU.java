@@ -85,6 +85,7 @@ public class Bundle_en_AU extends ListResourceBundle {
                 {"uniqueMinimalPointButton", "Unique Min Point"},
                 {"countLessThanMinimalPointButton", "Count less than minimal point"},
                 {"getUniqueMinimalPointAnswerEmpty", "Collection is empty"},
+                {"", ""},
 
 
 

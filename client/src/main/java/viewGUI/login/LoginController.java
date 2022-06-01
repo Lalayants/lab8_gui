@@ -99,7 +99,6 @@ public class LoginController implements Initializable {
         a.getRoot().setStyle("-fx-font-family: 'arial'");
         stage.setScene(a);
         stage.show();
-//        new AppController().setItems();
     }
 
     public void setText(String s) {
@@ -115,7 +114,6 @@ public class LoginController implements Initializable {
 
     }
     public void changeLanguage(ActionEvent event){
-        System.out.println("1");
         if (languageChoice.getValue().equals("Russian")){
             Locale locale = new Locale("ru", "RU");
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", locale);

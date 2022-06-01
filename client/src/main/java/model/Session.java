@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class Session {
-    public String messageForClient;
+    public String messageForClient = "";
     private ObjectOutputStream oos;
     private ObjectInputStream in;
     private String login = "sync";
@@ -58,16 +58,12 @@ public class Session {
             model.setPersonalQualitiesMinimum(a.getPersonalQualitiesMinimum());
             model.setDifficulty(a.getDifficulty());
             model.setAuthor(a.getAuthor());
-//            model.setBirthday(a.getBirthday());
             model.setWeight(a.getWeight());
             model.setEyeColor(a.getEyeColor());
             model.setCreators_id(a.getCreators_id());
             list.add(model);
-            System.out.println(model);
         }
-
         this.labModels = FXCollections.observableArrayList(list);
-        System.out.println(labModels);
     }
 
     private ObservableList<LabModel> labModels = FXCollections.observableArrayList();
@@ -76,7 +72,6 @@ public class Session {
         InetAddress address = InetAddress.getByName(null);
         socket = new Socket(address, port);
         setStreams(socket);
-        System.out.println("Ставлю лабы");
         setLabModels();
     }
 
@@ -135,7 +130,6 @@ public class Session {
 
     public void setLabModels() throws IOException {
         sentRequest(new Request("show", null));
-//        setLabModels((ArrayList<LabWorkDTO>) receiveAnswer());
     }
 
     public void updateCollection(Response response) {
@@ -145,7 +139,6 @@ public class Session {
                 setLabModels((ArrayList<LabWorkDTO>) response.getObjectAnswer());
             } else if (command.equals("login")) {
                 try {
-                    System.out.println(response.getAnswer());
                     id = Integer.parseInt(response.getAnswer());
                     setId(id);
                     setLogin(Integer.toString(id));
@@ -154,9 +147,9 @@ public class Session {
                 }
             } else if (command.equals("register")) {
                 try {
-                    System.out.println(response.getAnswer());
                     id = Integer.parseInt(response.getAnswer());
                     setId(id);
+                    setLogin(Integer.toString(id));
                 } catch (NumberFormatException e) {
                     messageForClient = response.getAnswer();
                 }
@@ -174,7 +167,6 @@ public class Session {
                 ArrayList<Integer> idsToDelete = (ArrayList<Integer>) response.getObjectAnswer();
                 ArrayList<LabModel> modelsToDelete = new ArrayList<>();
                 for (LabModel a : getLabModels()) {
-                    System.out.println(a.getId() + " " + idsToDelete.contains(a.getId()));
                     if (idsToDelete.contains(a.getId())) {
                         modelsToDelete.add(a);
                     }

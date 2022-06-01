@@ -114,9 +114,6 @@ public class AppController {
             while (c.next()) {
                 if (c.wasRemoved()) {
                     for (LabModel removedLabModel : c.getRemoved()) {
-                        System.out.println("remove");
-                        System.out.println(removedLabModel);
-                        System.out.println(removedLabModel.getX());
                         if (listOfX.contains(removedLabModel.getX()) && listOfX.contains(removedLabModel.getX())&&listOfY.contains(removedLabModel.getY())&&listOfId.contains(removedLabModel.getId())) {
                             int index = listOfId.indexOf(removedLabModel.getId());
                             listOfX.remove(index);
@@ -124,32 +121,16 @@ public class AppController {
                             listOfId.remove(index);
                             listOfWeight.remove(index);
                             listOfCreatorsId.remove(index);
-//                            listOfX.remove((Object) removedLabModel.getX());
-//                            listOfY.remove((Object) removedLabModel.getY());
-//                            listOfWeight.remove((Object) removedLabModel.getWeight());
-//                            listOfId.remove((Object) removedLabModel.getId());
-//                            listOfCreatorsId.remove((Object) removedLabModel.getCreators_id());
                         }
-                        System.out.println(listOfX);
-                        System.out.println(listOfY);
-                        System.out.println(listOfId);
-                        System.out.println(listOfWeight);
-                        System.out.println(listOfCreatorsId);
                     }
                 }
                 if (c.wasAdded()) {
                     for (LabModel addedLabModel : c.getAddedSubList()) {
-                        System.out.println("add");
                         listOfX.add(addedLabModel.getX());
                         listOfY.add(addedLabModel.getY());
                         listOfWeight.add(addedLabModel.getWeight());
                         listOfId.add(addedLabModel.getId());
                         listOfCreatorsId.add(addedLabModel.getCreators_id());
-                        System.out.println(listOfX);
-                        System.out.println(listOfY);
-                        System.out.println(listOfId);
-                        System.out.println(listOfWeight);
-                        System.out.println(listOfCreatorsId);
                     }
                 }
                 redrawObjects();
@@ -163,11 +144,6 @@ public class AppController {
             listOfWeight.add(item.getWeight());
             listOfCreatorsId.add(item.getCreators_id());
         }
-        System.out.println(listOfX);
-        System.out.println(listOfY);
-        System.out.println(listOfId);
-        System.out.println(listOfWeight);
-        System.out.println(listOfCreatorsId);
         labModelTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showPersonDetails(newValue));
 
@@ -208,7 +184,7 @@ public class AppController {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
-                        System.out.println(e.getX() + " " + e.getY());
+//                        System.out.println(e.getX() + " " + e.getY());
                         ObservableList<LabModel> list = labModelTableView.getItems();
                         boolean done = false;
                         for (LabModel lab : list){
@@ -232,9 +208,6 @@ public class AppController {
 
     private void redrawObjects() {
         redrawPlain();
-//        Vector<Rect> usedRect = new Vector<>();
-//        Vector<Rect> regularObjects = new Vector<>();
-//        Vector<Rect> animatedObjects = new Vector<>();
         for (int i = 0; i < listOfX.size(); i++) {
             double sizeHalf = listOfWeight.get(i) / 2;
             double x = tabMap.getWidth() / 2 + listOfX.get(i) - sizeHalf;
@@ -243,38 +216,7 @@ public class AppController {
             graphicsContext.setFill(colors.get(a.creators_id % colors.size()));
             graphicsContext.fillRect(a.x, a.y, a.halfSize * 2, a.halfSize * 2);
             graphicsContext.strokeText(String.valueOf(a.id), a.x, a.y + a.halfSize, a.halfSize * 2);
-//          graphicsContext.setFill(colors.get(listOfCreatorsId.get(i) % colors.size()))so
-//            System.out.println("!!!");
-//            for (Rect r: rectangles){
-//                System.out.println(r.equals(a));
-//            }
-//            System.out.println("!!!!");
-//            if (rectangles.contains(a)) {
-//                System.out.println("содержит");
-//                regularObjects.add(a);
-//            } else {
-//                animatedObjects.add(a);
-//            }
-//        }
-//        if (animatedObjects.isEmpty()) {
-//            for (Rect r : regularObjects) {
-//                System.out.println("1234");
-//                graphicsContext.setFill(colors.get(r.creators_id % colors.size()));
-//                graphicsContext.fillRect(r.x, r.y, r.halfSize * 2, r.halfSize * 2);
-//                graphicsContext.strokeText(String.valueOf(r.id), r.x, r.y + r.halfSize, r.halfSize * 2);
-//            }
-//        } else {
-//            for (Rect r : animatedObjects) {
-//                graphicsContext.setFill(colors.get(r.creators_id % colors.size()));
-//                graphicsContext.fillRect(r.x, r.y, r.halfSize * 2, r.halfSize * 2);
-//                graphicsContext.strokeText(String.valueOf(r.id), r.x, r.y + r.halfSize, r.halfSize * 2);
-//            }
         }
-//        animatedObjects.addAll(regularObjects);
-//        rectangles.clear();
-//        rectangles.addAll(animatedObjects);
-//        System.out.println(rectangles);
-
     }
 
     private void redrawPlain() {
@@ -316,7 +258,6 @@ public class AppController {
     @FXML
     private void handleEditLabWork() {
         try {
-            System.out.println(listOfX);
             Integer id = Integer.parseInt(idTextField.getText());
             if (creators_id == LoginWindow.id) {
                 EditController.setLab(activeLabWork);
@@ -379,7 +320,6 @@ public class AppController {
     private void handleDeleteLabWork() {
         try {
             Integer id = Integer.parseInt(idTextField.getText());
-            System.out.println(id);
             if (creators_id == LoginWindow.id) {
                 Request request = new Request("remove_by_id", id.toString());
                 LoginWindow.clientN.giveSessionToSent(request);
@@ -437,18 +377,13 @@ public class AppController {
     public  void countLessThanMinimalPoint(){
         try {
             Double minP = Double.valueOf(minimalPointTextField.getText());
-            if (minP == null)
-                throw new NumberFormatException();
-            else {
-                LoginWindow.clientN.giveSessionToSent(new Request("count_less_than_minimal_point", minP));
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.session.messageForClient);
-
+            LoginWindow.clientN.giveSessionToSent(new Request("count_less_than_minimal_point", minP));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.session.messageForClient);
         }catch (NumberFormatException e){
             showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.resourceBundle.getString("minimalPointFillError"));
         }

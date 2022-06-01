@@ -24,7 +24,6 @@ public class Register implements Serializable, Commandable {
         try {
             String [] data = ((String) o) .split(" ");
             Connection c = TableCreator.getConnection();
-            //Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             String registration = "INSERT INTO Users(login, password)\n" +
                     "VALUES (?, ?);";
             PreparedStatement stmt =  c.prepareStatement(registration);
@@ -37,7 +36,7 @@ public class Register implements Serializable, Commandable {
             ResultSet res = stmt.executeQuery();
             res.next();
             Integer id = res.getInt("id");
-             response.setAnswer(id.toString());
+            response.setAnswer(id.toString());
             return response;
         } catch (SQLException e) {
             response.setAnswer("Имя пользователя занято");
