@@ -185,6 +185,7 @@ public class Session {
             } else if (command.equals("add")){
                 LabWorkDTO dto = (LabWorkDTO) response.getObjectAnswer();
                 getLabModels().add(new LabModel(dto));
+                messageForClient = response.getAnswer();
             } else if (command.equals("update")){
                 LabWorkDTO labWorkDTO = (LabWorkDTO) response.getObjectAnswer();
                 int dId = labWorkDTO.getId();
@@ -197,6 +198,26 @@ public class Session {
                     }
                 }
                 getLabModels().remove(d);
+            } else if (command.equals("remove_lower")){
+                messageForClient = response.getAnswer();
+                LabModel toRemove = null;
+                ArrayList<Integer> ids = (ArrayList<Integer>) response.getObjectAnswer();
+                if (ids.size()>0){
+                    for (Integer id: ids){
+                        for (LabModel lab: getLabModels()){
+                            if (id.equals(lab.getId())){
+                                toRemove = lab;
+                                break;
+                            }
+                        }
+                        if(toRemove != null){
+                            getLabModels().remove(toRemove);
+                            toRemove = null;
+                        }
+                    }
+                }
+            }else if(command.equals("add_if_min")){
+                messageForClient = response.getAnswer();
             }
         } catch (NullPointerException  ignored) {
         }

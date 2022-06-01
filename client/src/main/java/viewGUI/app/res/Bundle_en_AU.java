@@ -75,6 +75,13 @@ public class Bundle_en_AU extends ListResourceBundle {
                 {"loginErrorEmptyField", "Both fields must be entered"},
                 {"Неверный логин или пароль", "Incorrect login or password"},
 
+                {"commandTab", "Other commands"},
+                {"removeLower", "Remove lower"},
+                {"addIfMin", "Add if min"},
+                {"removeLowerAnswerNoElements", "There are no elements lower than entered"},
+                {"removeLowerAnswerSuccess", "Elements are deleted"},
+                {"AddIfMinAnswerNotMin", "Entered element is not minimal"},
+                {"AddSuccess", "Element successfully added"},
 
 
 

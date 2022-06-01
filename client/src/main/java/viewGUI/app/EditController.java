@@ -127,7 +127,8 @@ public class EditController implements Initializable {
         }
 
         if (mistake.isEmpty()) {
-            int index = AppController.listOfId.indexOf(xPrevious);
+            int index = AppController.listOfId.indexOf(idPrevious);
+            System.out.println(index);
             AppController.listOfX.remove(index);
             AppController.listOfY.remove(index);
             AppController.listOfId.remove(index);

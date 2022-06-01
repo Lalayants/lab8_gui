@@ -60,9 +60,9 @@ public class LoginController implements Initializable {
     public void loginButtonOnAction(ActionEvent event) throws InterruptedException, IOException {
         LoginWindow.session.setId(-1);
         if(getAnwser(usernameTextField.getText(), passwordTextField.getText(), "login")) {
-            System.out.println();
-            System.out.println(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));;
-            loginMessageLabel.setText(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+            try {
+                loginMessageLabel.setText(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+            }catch (NullPointerException ignored){}
         }else{
             loginMessageLabel.setText(LoginWindow.resourceBundle.getString("loginErrorEmptyField"));
         }

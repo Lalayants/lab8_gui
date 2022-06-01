@@ -2,6 +2,7 @@ package controller.commands;
 
 import entity.LabWorkDTO;
 import model.Repository;
+import requests.Response;
 
 import java.io.Serializable;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
 
 public class RemoveLower implements Commandable, Serializable {
     @Override
-    public String execute(Object o, String login) {
+    public Response execute(Object o, String login) {
         LabWorkDTO labWork = (LabWorkDTO) o;
         return Repository.removeLower(labWork, login);
     }

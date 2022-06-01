@@ -54,7 +54,7 @@ public class Repository {
             ResultSet res = stmt.executeQuery();
             res.next();
             a.setId(res.getInt("id"));
-            Response r = new Response("Добавлено");
+            Response r = new Response("AddSuccess");
             r.setForUpdate();
             r.setCommand("add");
             r.setObjectAnswer(a);
@@ -67,18 +67,16 @@ public class Repository {
     }
 
     public static Response addIfMin(LabWorkDTO a, String login) {
-
+        Response response = new Response("AddIfMinAnswerNotMin");
+        response.setCommand("add_if_min");
         try {
-//            c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             Connection c = TableCreator.getConnection();
             String CreateInSql = "select name from labworks order by name limit 1";
             PreparedStatement stmt = c.prepareStatement(CreateInSql);
             ResultSet res = stmt.executeQuery();
             if (res.next()) {
-                System.out.println(res.getString("name"));
-                System.out.println(res.getString("name").compareTo(a.getName()));
-                if (res.getString("name").compareTo(a.getName()) < 0)
-                    return new Response("ваш элемент не минимальный");
+                if (res.getString("name").compareTo(a.getName()) <= 0)
+                    return response;
             }
             return new Add().execute(a, login);
 
@@ -324,18 +322,33 @@ public class Repository {
         }
     }
 
-    public static String removeLower(LabWorkDTO labWork, String login) {
+    public static Response removeLower(LabWorkDTO labWork, String login) {
+        Response response = new Response("removeLowerAnswerNoElements");
+        response.setCommand("remove_lower");
         try {
             Connection c = TableCreator.getConnection();
-            String CreateInSql = "delete from labworks" +
-                    " where login_id = ? and name < ?;";
+            String CreateInSql = "select id from labworks " +
+                    "where name < ? and login_id = ?";
             PreparedStatement stmt = c.prepareStatement(CreateInSql);
-            stmt.setInt(1, GetLoginId.getIdOfLogin(login));
-            stmt.setString(2, labWork.getName());
-            stmt.executeUpdate();
-            return "Подходящие элементы удалены";
-        } catch (SQLException e) {
-            return "В коллекции уже не осталось элементов, созданных вами";
+            stmt.setString(1, labWork.getName());
+            stmt.setInt(2, Integer.parseInt(login));
+            ResultSet res = stmt.executeQuery();
+            ArrayList<Integer> ids = new ArrayList<>();
+            while(res.next()){
+                int id = res.getInt("id");
+                ids.add(id);
+                CreateInSql = "delete from labworks\n" +
+                        "where id = ?;";
+                stmt = c.prepareStatement(CreateInSql);
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                response.setAnswer("removeLowerAnswerSuccess");
+                response.setForUpdate();
+            }
+            response.setObjectAnswer(ids);
+            return response;
+        } catch (SQLException a) {
+            return new Response("Элемента с таким id нет или он создан не вами");
         }
     }
 
