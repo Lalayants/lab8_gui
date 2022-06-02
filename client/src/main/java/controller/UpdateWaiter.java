@@ -26,8 +26,8 @@ public class UpdateWaiter implements Runnable{
             try {
                         Response response = (Response) inputStream.readObject();
                         session.updateCollection(response);
-            } catch (IOException | NullPointerException | ClassNotFoundException  e) {
-                e.printStackTrace();
+            } catch (IOException | NullPointerException | ClassNotFoundException  ignored) {
+
             }
         }
     }

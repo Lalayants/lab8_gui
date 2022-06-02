@@ -3,7 +3,9 @@ package viewGUI.app;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
@@ -14,6 +16,7 @@ import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -122,7 +125,23 @@ public class AddController implements Initializable {
 
         if (mistake.isEmpty()) {
             enteredLabModel = labModel;
-            LoginWindow.clientN.giveSessionToSent(new Request("add", enteredLabModel.toDTO()));
+            try {
+                LoginWindow.clientN.giveSessionToSent(new Request("add", enteredLabModel.toDTO()));
+            } catch (IOException e) {
+                Parent root = null;
+                cancelButtonOnAction();
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                Scene a = new Scene(root, 600, 400);
+                a.getRoot().setStyle("-fx-font-family: 'arial'");
+                LoginWindow.prStage.setScene(a);
+                LoginWindow.prStage.setResizable(false);
+                LoginWindow.prStage.show();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -219,13 +238,30 @@ public class AddController implements Initializable {
 
         if (mistake.isEmpty()) {
             enteredLabModel = labModel;
-            LoginWindow.clientN.giveSessionToSent(new Request("remove_lower", enteredLabModel.toDTO()));
             try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                LoginWindow.clientN.giveSessionToSent(new Request("remove_lower", enteredLabModel.toDTO()));
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("removeLower"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+
+            } catch (IOException e) {
+                Parent root = null;
+                cancelButtonOnAction();
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                    Scene a = new Scene(root, 600, 400);
+                    a.getRoot().setStyle("-fx-font-family: 'arial'");
+                    LoginWindow.prStage.setScene(a);
+                    LoginWindow.prStage.setResizable(false);
+                    LoginWindow.prStage.show();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
-            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("removeLower"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -322,13 +358,32 @@ public class AddController implements Initializable {
 
         if (mistake.isEmpty()) {
             enteredLabModel = labModel;
-            LoginWindow.clientN.giveSessionToSent(new Request("add_if_min", enteredLabModel.toDTO()));
             try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                LoginWindow.clientN.giveSessionToSent(new Request("add_if_min", enteredLabModel.toDTO()));
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("addIfMin"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+
+            } catch (IOException e) {
+                cancelButtonOnAction();
+                Parent root = null;
+                cancelButtonOnAction();
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                    Scene a = new Scene(root, 600, 400);
+                    a.getRoot().setStyle("-fx-font-family: 'arial'");
+                    LoginWindow.prStage.setScene(a);
+                    LoginWindow.prStage.setResizable(false);
+                    LoginWindow.prStage.show();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
-            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("addIfMin"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

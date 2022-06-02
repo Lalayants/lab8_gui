@@ -28,7 +28,7 @@ public class Session {
     }
 
     public void setId(int id) {
-        id = id;
+        this.id = id;
     }
 
     private Socket socket;
@@ -110,15 +110,6 @@ public class Session {
         oos.writeObject(req);
         oos.flush();
     }
-
-//    public Object receiveAnswer() throws IOException {
-//        try {
-//            return in.readObject();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     public void shutDown() {
         System.exit(0);

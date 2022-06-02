@@ -38,6 +38,4 @@ public class LoginWindow extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
     }
-
-
 }

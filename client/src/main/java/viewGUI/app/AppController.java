@@ -287,7 +287,6 @@ public class AppController {
         graphicsContext.strokeLine(tabMap.getWidth() / 2, 0, tabMap.getWidth() / 2, tabMap.getHeight());
         graphicsContext.strokeLine(tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 - 5, tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 + 5);
         graphicsContext.strokeText("10", tabMap.getWidth() / 2 + 5, tabMap.getHeight() / 2 + 18, 10);
-
         graphicsContext.strokeLine(tabMap.getWidth()/2 - 10, 10, tabMap.getWidth()/2, 0);
         graphicsContext.strokeLine(tabMap.getWidth()/2 + 10, 10, tabMap.getWidth()/2, 0);
         graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight()/2+10, tabMap.getWidth(), tabMap.getHeight()/2);
@@ -362,7 +361,22 @@ public class AppController {
             Integer id = Integer.parseInt(idTextField.getText());
             if (creators_id == LoginWindow.id) {
                 Request request = new Request("remove_by_id", id.toString());
-                LoginWindow.clientN.giveSessionToSent(request);
+                try {
+                    LoginWindow.clientN.giveSessionToSent(request);
+                } catch (IOException e) {
+                    Parent root = null;
+                    try {
+                        root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                        LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                        Scene a = new Scene(root, 600, 400);
+                        a.getRoot().setStyle("-fx-font-family: 'arial'");
+                        LoginWindow.prStage.setScene(a);
+                        LoginWindow.prStage.setResizable(false);
+                        LoginWindow.prStage.show();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("labWorkRemove"), LoginWindow.resourceBundle.getString("labWorkRemoveSuccess"));
             } else {
                 showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("labWorkRemove"), LoginWindow.resourceBundle.getString("labWorkRemoveError"));
@@ -375,7 +389,22 @@ public class AppController {
     @FXML
     private void handleClearLabWorks() {
         if (showConfirmationAlert(LoginWindow.resourceBundle.getString("confirmation"), LoginWindow.resourceBundle.getString("confirmationOfClear"), LoginWindow.resourceBundle.getString("confirmationOfClearMessage"))) {
-            LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
+            try {
+                LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
+            } catch (IOException e) {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                    Scene a = new Scene(root, 600, 400);
+                    a.getRoot().setStyle("-fx-font-family: 'arial'");
+                    LoginWindow.prStage.setScene(a);
+                    LoginWindow.prStage.setResizable(false);
+                    LoginWindow.prStage.show();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
@@ -402,7 +431,22 @@ public class AppController {
     }
 
     public void showUniMinimalPoint() {
-        LoginWindow.clientN.giveSessionToSent(new Request("print_unique_minimal_point", ""));
+        try {
+            LoginWindow.clientN.giveSessionToSent(new Request("print_unique_minimal_point", ""));
+        } catch (IOException e) {
+            Parent root = null;
+            try {
+                root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                Scene a = new Scene(root, 600, 400);
+                a.getRoot().setStyle("-fx-font-family: 'arial'");
+                LoginWindow.prStage.setScene(a);
+                LoginWindow.prStage.setResizable(false);
+                LoginWindow.prStage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -419,7 +463,22 @@ public class AppController {
     public void countLessThanMinimalPoint() {
         try {
             Double minP = Double.valueOf(minimalPointTextField.getText());
-            LoginWindow.clientN.giveSessionToSent(new Request("count_less_than_minimal_point", minP));
+            try {
+                LoginWindow.clientN.giveSessionToSent(new Request("count_less_than_minimal_point", minP));
+            } catch (IOException e) {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                    Scene a = new Scene(root, 600, 400);
+                    a.getRoot().setStyle("-fx-font-family: 'arial'");
+                    LoginWindow.prStage.setScene(a);
+                    LoginWindow.prStage.setResizable(false);
+                    LoginWindow.prStage.show();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

@@ -3,7 +3,10 @@ package viewGUI.app;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -11,6 +14,7 @@ import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -138,9 +142,26 @@ public class EditController implements Initializable {
 //            AppController.listOfY.remove(yPrevious);
 //            AppController.listOfId.remove((Object) idPrevious);
             enteredLabModel = labModel;
-            LoginWindow.clientN.giveSessionToSent(new Request("update", enteredLabModel.toDTO()));
-            cancelButtonOnAction();
-            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("successOfEdit"), LoginWindow.resourceBundle.getString("successOfEditMessage"));
+            try {
+                LoginWindow.clientN.giveSessionToSent(new Request("update", enteredLabModel.toDTO()));
+                cancelButtonOnAction();
+                AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("successOfEdit"), LoginWindow.resourceBundle.getString("successOfEditMessage"));
+
+            } catch (IOException e) {
+                cancelButtonOnAction();
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    LoginWindow.prStage.setTitle("Простите, мы все сломали");
+                    Scene a = new Scene(root, 600, 400);
+                    a.getRoot().setStyle("-fx-font-family: 'arial'");
+                    LoginWindow.prStage.setScene(a);
+                    LoginWindow.prStage.setResizable(false);
+                    LoginWindow.prStage.show();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         } else {
             AppController.showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("LabWorkFillError"), mistake);
         }

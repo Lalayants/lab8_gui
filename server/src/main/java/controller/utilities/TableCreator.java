@@ -13,19 +13,15 @@ public class TableCreator {
 
     public static void TableCreator() {
         Connection c = null;
-
         PreparedStatement stmt = null;
-
         String CreateSql = null;
         try {
-
             Class.forName("org.postgresql.Driver");
 //            Properties info = new Properties();
 //            info.load(new FileInputStream("Server/db.cfg"));
             c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             //          info.load(new FileInputStream("src/main/java/info_helios.cfg"));
 //            c = DriverManager.getConnection("jdbc:postgresql://pg:5432/studs", "s", "");
-
             connection = c;
             System.out.println("Database Connected ..");
 
@@ -48,10 +44,6 @@ public class TableCreator {
             stmt = c.prepareStatement(CreateSql);
             stmt.executeUpdate();
             System.out.println("LabWorks' table created");
-//            stmt.close();
-//
-//            c.close();
-
         } catch (Exception e) {
             if (e.getMessage().contains("already exists"))
                 System.out.println("LabWorks' table already exists");
@@ -62,28 +54,20 @@ public class TableCreator {
             }
         }
         try {
-
             Class.forName("org.postgresql.Driver");
-
             // c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
-
-
             CreateSql = "Create Table Users(id SERIAL PRIMARY KEY, login varchar unique, password varchar ) ";
             System.out.println("User table created");
             stmt = c.prepareStatement(CreateSql);
             stmt.executeUpdate();
-
         } catch (Exception e) {
             if (e.getMessage().contains("already exists"))
                 System.out.println("Table already exists");
             else {
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
-
                 System.exit(0);
             }
         }
-
-
         System.out.println("SQL tables are ready to use\n");
     }
 }
