@@ -75,6 +75,18 @@ public class Bundle_ru_RU extends ListResourceBundle {
                 {"loginErrorEmptyField", "Оба поля должны быть заполнены"},
                 {"Неверный логин или пароль", "Неверный логин или пароль"},
 
+                {"commandTab", "Other commands"},
+                {"removeLower", "Убрать наименьший"},
+                {"addIfMin", "Добавить, если мин"},
+                {"removeLowerAnswerNoElements", "Нет элемента меньше заданного"},
+                {"removeLowerAnswerSuccess", "Элементы удалены"},
+                {"AddIfMinAnswerNotMin", "Введенная не минимальная"},
+                {"AddSuccess", "Элемент успешно добавлен"},
+                {"uniqueMinimalPointButton", "Уникальные мин баллы"},
+                {"countLessThanMinimalPointButton", "Меньше, чем заданный мин балл"},
+                {"getUniqueMinimalPointAnswerEmpty", "Коллекция пуста"},
+                {"", ""},
+
 
         };
     }

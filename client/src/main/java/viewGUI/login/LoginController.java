@@ -107,7 +107,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        languages = FXCollections.observableArrayList("English", "Russian", "Language");
+        languages = FXCollections.observableArrayList("English", "Russian", "Sweden","Language");
         languageChoice.setItems(languages);
         languageChoice.setValue("Language");
         languageChoice.setOnAction(this::changeLanguage);
@@ -115,11 +115,13 @@ public class LoginController implements Initializable {
     }
     public void changeLanguage(ActionEvent event){
         if (languageChoice.getValue().equals("Russian")){
-            Locale locale = new Locale("ru", "RU");
-            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", locale);
+//            Locale locale = ;
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("ru", "RU"));
         } else if(languageChoice.getValue().equals("English")){
-            Locale locale = new Locale("en", "AU");
-            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", locale);
+//            Locale locale = new Locale("en", "AU");
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
+        } else if(languageChoice.getValue().equals("Sweden")){
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("se", "SE"));
         }
         try {
             LoginWindow.prStage.setTitle(LoginWindow.resourceBundle.getString("authorization"));
