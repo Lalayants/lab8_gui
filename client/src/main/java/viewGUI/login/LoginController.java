@@ -1,6 +1,5 @@
 package viewGUI.login;
 
-import controller.ClientN;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,21 +12,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import viewGUI.app.App;
 import viewGUI.app.AppController;
-//import viewGUI.app.App;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import static java.lang.Thread.sleep;
 
 public class LoginController implements Initializable {
     private static String login;
@@ -56,17 +48,18 @@ public class LoginController implements Initializable {
             getAnwser(usernameTextField.getText(), passwordTextField.getText(), "register");
             LoginWindow.id = LoginWindow.session.getId();
             loginMessageLabel.setText(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
-        }else
+        } else
             loginMessageLabel.setText(LoginWindow.resourceBundle.getString("loginErrorEmptyField"));
     }
 
     public void loginButtonOnAction(ActionEvent event) throws InterruptedException, IOException {
         LoginWindow.session.setId(-1);
-        if(getAnwser(usernameTextField.getText(), passwordTextField.getText(), "login")) {
+        if (getAnwser(usernameTextField.getText(), passwordTextField.getText(), "login")) {
             try {
                 loginMessageLabel.setText(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
-            }catch (NullPointerException ignored){}
-        }else{
+            } catch (NullPointerException ignored) {
+            }
+        } else {
             loginMessageLabel.setText(LoginWindow.resourceBundle.getString("loginErrorEmptyField"));
         }
 
@@ -77,10 +70,10 @@ public class LoginController implements Initializable {
             LoginWindow.clientN.checkLogin(command + " " + login + " " + password);
             try {
                 Thread.sleep(100);
-            if (LoginWindow.session.getId() != -1) {
-                LoginWindow.id = LoginWindow.session.getId();
-                loadSecond();
-            }
+                if (LoginWindow.session.getId() != -1) {
+                    LoginWindow.id = LoginWindow.session.getId();
+                    loadSecond();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -90,8 +83,8 @@ public class LoginController implements Initializable {
     }
 
     public void loadSecond() throws IOException {
-        login =LoginWindow.resourceBundle.getString("userNameField")+": "+ usernameTextField.getText();
-        login += ", "+LoginWindow.resourceBundle.getString("creatorsIdColumn") +" = " + String.valueOf(LoginWindow.id);
+        login = LoginWindow.resourceBundle.getString("userNameField") + ": " + usernameTextField.getText();
+        login += ", " + LoginWindow.resourceBundle.getString("creatorsIdColumn") + " = " + String.valueOf(LoginWindow.id);
         AppController.setLogin(login);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("app.fxml"));
         Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource("app.fxml"), LoginWindow.resourceBundle);
@@ -110,25 +103,22 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        languages = FXCollections.observableArrayList("English", "Russian", "Sweden", "Belorussian","Language");
+        languages = FXCollections.observableArrayList("English", "Russian", "Sweden", "Belorussian", "Language");
         languageChoice.setItems(languages);
         languageChoice.setValue("Language");
         languageChoice.setOnAction(this::changeLanguage);
-
     }
-    public void changeLanguage(ActionEvent event){
-        if (languageChoice.getValue().equals("Russian")){
-//            Locale locale = ;
+
+    public void changeLanguage(ActionEvent event) {
+        if (languageChoice.getValue().equals("Russian"))
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("ru", "RU"));
-        } else if(languageChoice.getValue().equals("English")){
-//            Locale locale = new Locale("en", "AU");
+        else if (languageChoice.getValue().equals("English"))
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
-        } else if(languageChoice.getValue().equals("Sweden")){
+        else if (languageChoice.getValue().equals("Sweden"))
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("se", "SE"));
-        }
-        else if(languageChoice.getValue().equals("Belorussian")){
+        else if (languageChoice.getValue().equals("Belorussian"))
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("by", "BY"));
-        }
+
         try {
             LoginWindow.prStage.setTitle(LoginWindow.resourceBundle.getString("authorization"));
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("login.fxml"), LoginWindow.resourceBundle);

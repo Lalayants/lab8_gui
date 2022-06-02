@@ -1,6 +1,11 @@
 package viewGUI.app;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -21,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
@@ -29,6 +35,7 @@ import viewGUI.login.LoginWindow;
 import java.lang.reflect.*;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Vector;
@@ -39,6 +46,7 @@ public class AppController {
     private static String login;
     private Vector<Color> colors = new Vector<>();
     private Vector<Rect> rectangles = new Vector<>();
+    private ArrayList<Integer> drawnIDs = new ArrayList<>();
     public static ObservableList<Float> listOfX = FXCollections.observableArrayList();
     public static ObservableList<Long> listOfY = FXCollections.observableArrayList();
     public static ObservableList<Integer> listOfId = FXCollections.observableArrayList();
@@ -114,7 +122,7 @@ public class AppController {
             while (c.next()) {
                 if (c.wasRemoved()) {
                     for (LabModel removedLabModel : c.getRemoved()) {
-                        if (listOfX.contains(removedLabModel.getX()) && listOfX.contains(removedLabModel.getX())&&listOfY.contains(removedLabModel.getY())&&listOfId.contains(removedLabModel.getId())) {
+                        if (listOfX.contains(removedLabModel.getX()) && listOfX.contains(removedLabModel.getX()) && listOfY.contains(removedLabModel.getY()) && listOfId.contains(removedLabModel.getId())) {
                             int index = listOfId.indexOf(removedLabModel.getId());
                             listOfX.remove(index);
                             listOfY.remove(index);
@@ -138,6 +146,7 @@ public class AppController {
         });
 
         for (LabModel item : labModelTableView.getItems()) {
+            drawnIDs.add(item.getId());
             listOfX.add(item.getX());
             listOfY.add(item.getY());
             listOfId.add(item.getId());
@@ -187,20 +196,19 @@ public class AppController {
 //                        System.out.println(e.getX() + " " + e.getY());
                         ObservableList<LabModel> list = labModelTableView.getItems();
                         boolean done = false;
-                        for (LabModel lab : list){
-                            if (e.getX() < tabMap.getWidth() / 2 + lab.getX() + lab.getWeight()/2 &&e.getX() > tabMap.getWidth() / 2 + lab.getX() - lab.getWeight()/2)
-                                if (e.getY() > tabMap.getHeight() / 2 - lab.getY() - lab.getWeight()/2 && e.getY() < tabMap.getHeight() / 2 - lab.getY() + lab.getWeight()/2) {
+                        for (LabModel lab : list) {
+                            if (e.getX() < tabMap.getWidth() / 2 + lab.getX() + lab.getWeight() / 2 && e.getX() > tabMap.getWidth() / 2 + lab.getX() - lab.getWeight() / 2)
+                                if (e.getY() > tabMap.getHeight() / 2 - lab.getY() - lab.getWeight() / 2 && e.getY() < tabMap.getHeight() / 2 - lab.getY() + lab.getWeight() / 2) {
                                     showPersonDetails(lab);
-                                    if (e.getButton().equals(MouseButton.PRIMARY) ) {
+                                    if (e.getButton().equals(MouseButton.PRIMARY)) {
                                         handleEditLabWork();
                                         break;
-                                    } else if(e.getButton().equals(MouseButton.SECONDARY)){
+                                    } else if (e.getButton().equals(MouseButton.SECONDARY)) {
                                         handleDeleteLabWork();
                                         break;
                                     }
                                 }
                         }
-
                     }
                 });
     }
@@ -208,14 +216,64 @@ public class AppController {
 
     private void redrawObjects() {
         redrawPlain();
+        drawnBefore();
+        Integer id = null;// TODO: 6/2/22 из ListOfId найти тот, которого нет в drawnIDs, для него запустить анимацию, внутри которой запускать drawnBefore и redrawPlain, после конца анимации добавить в лист нарисованных
         for (int i = 0; i < listOfX.size(); i++) {
-            double sizeHalf = listOfWeight.get(i) / 2;
-            double x = tabMap.getWidth() / 2 + listOfX.get(i) - sizeHalf;
-            double y = tabMap.getHeight() / 2 - listOfY.get(i) - sizeHalf;
-            Rect a = new Rect(x, y, sizeHalf, listOfId.get(i), listOfCreatorsId.get(i));
-            graphicsContext.setFill(colors.get(a.creators_id % colors.size()));
-            graphicsContext.fillRect(a.x, a.y, a.halfSize * 2, a.halfSize * 2);
-            graphicsContext.strokeText(String.valueOf(a.id), a.x, a.y + a.halfSize, a.halfSize * 2);
+            if (!drawnIDs.contains(listOfId.get(i))) {
+                double sizeHalf = listOfWeight.get(i) / 2;
+                double x = tabMap.getWidth() / 2 + listOfX.get(i) - sizeHalf;
+                double y = tabMap.getHeight() / 2 - listOfY.get(i) - sizeHalf;
+                int creatorsID = listOfCreatorsId.get(i);
+                id = listOfId.get(i);
+                DoubleProperty xx = new SimpleDoubleProperty();
+                DoubleProperty yy = new SimpleDoubleProperty();
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.seconds(0),
+                                new KeyValue(xx, tabMap.getWidth() / 2),
+                                new KeyValue(yy, tabMap.getHeight() / 2)
+                        ),
+                        new KeyFrame(Duration.seconds(0.25),
+                                new KeyValue(xx, x),
+                                new KeyValue(yy, y)
+                        ),
+                        new KeyFrame(Duration.seconds(0.26),
+                                new KeyValue(xx, 3000),
+                                new KeyValue(yy, 3000))
+                );
+                AnimationTimer timer = new AnimationTimer() {
+                    @Override
+                    public void handle(long now) {
+                        GraphicsContext gc = graphicsContext;
+                        redrawPlain();
+                        drawnBefore();
+                        gc.setFill(colors.get(creatorsID % colors.size()));
+                        gc.fillRect(xx.doubleValue(), yy.doubleValue(), sizeHalf * 2, sizeHalf * 2);
+                    }
+                };
+                timer.start();
+                timeline.play();
+
+                graphicsContext.strokeText(String.valueOf(id), x, y + sizeHalf, sizeHalf * 2);
+                break;
+            }
+        }
+        if (id != null)
+            drawnIDs.add(id);
+        redrawPlain();
+        drawnBefore();
+    }
+
+    private void drawnBefore() {
+        for (int i = 0; i < listOfX.size(); i++) {
+            if (drawnIDs.contains(listOfId.get(i))) {
+                double sizeHalf = listOfWeight.get(i) / 2;
+                double x = tabMap.getWidth() / 2 + listOfX.get(i) - sizeHalf;
+                double y = tabMap.getHeight() / 2 - listOfY.get(i) - sizeHalf;
+                Rect a = new Rect(x, y, sizeHalf, listOfId.get(i), listOfCreatorsId.get(i));
+                graphicsContext.setFill(colors.get(a.creators_id % colors.size()));
+                graphicsContext.fillRect(a.x, a.y, a.halfSize * 2, a.halfSize * 2);
+                graphicsContext.strokeText(String.valueOf(a.id), a.x, a.y + a.halfSize, a.halfSize * 2);
+            }
         }
     }
 
@@ -233,27 +291,6 @@ public class AppController {
         graphicsContext.strokeText("10", tabMap.getWidth() / 2 + 3, tabMap.getHeight() / 2 + 18);
     }
 
-    private void startAnimation(double x0, double x1, double y) {
-
-        loop = new AnimationTimer() {
-
-            double startX = 100;
-            double endX = 200;
-            double y = 100;
-            double x = startX;
-            double speed = 1;
-
-            @Override
-            public void handle(long now) {
-                graphicsContext.fillOval(x, y, 5, 5);
-                x += speed;
-                if (x >= endX) {
-                    loop.stop();
-                }
-            }
-        };
-        loop.start();
-    }
 
     @FXML
     private void handleEditLabWork() {
@@ -262,7 +299,7 @@ public class AppController {
             if (creators_id == LoginWindow.id) {
                 EditController.setLab(activeLabWork);
                 String fxmlName = "LabWorkEditDialog";
-                Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource( "EditDialog.fxml"), LoginWindow.resourceBundle);
+                Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource("EditDialog.fxml"), LoginWindow.resourceBundle);
                 Stage stage = new Stage();
                 editStage = stage;
                 stage.setTitle(LoginWindow.resourceBundle.getString("editUtility"));
@@ -360,7 +397,8 @@ public class AppController {
             e.printStackTrace();
         }
     }
-    public void showUniMinimalPoint(){
+
+    public void showUniMinimalPoint() {
         LoginWindow.clientN.giveSessionToSent(new Request("print_unique_minimal_point", ""));
         try {
             Thread.sleep(100);
@@ -368,13 +406,14 @@ public class AppController {
             e.printStackTrace();
         }
         if (LoginWindow.session.messageForClient.equals("getUniqueMinimalPointAnswerEmpty"))
-        AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("uniqueMinimalPointButton"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("uniqueMinimalPointButton"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
         else
-            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("uniqueMinimalPointButton"), LoginWindow.session.messageForClient);
+            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("uniqueMinimalPointButton"), LoginWindow.session.messageForClient);
 
 
     }
-    public  void countLessThanMinimalPoint(){
+
+    public void countLessThanMinimalPoint() {
         try {
             Double minP = Double.valueOf(minimalPointTextField.getText());
             LoginWindow.clientN.giveSessionToSent(new Request("count_less_than_minimal_point", minP));
@@ -383,8 +422,8 @@ public class AppController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.session.messageForClient);
-        }catch (NumberFormatException e){
+            AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"), LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.session.messageForClient);
+        } catch (NumberFormatException e) {
             showErrorAlert(LoginWindow.resourceBundle.getString("error"), LoginWindow.resourceBundle.getString("countLessThanMinimalPointButton"), LoginWindow.resourceBundle.getString("minimalPointFillError"));
         }
 

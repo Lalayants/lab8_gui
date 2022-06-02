@@ -95,14 +95,14 @@ public class Session {
         oos.flush();
     }
 
-    public Object receiveAnswer() throws IOException {
-        try {
-            return in.readObject();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public Object receiveAnswer() throws IOException {
+//        try {
+//            return in.readObject();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public void shutDown() {
         System.exit(0);

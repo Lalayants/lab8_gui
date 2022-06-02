@@ -29,8 +29,6 @@ public class EditController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        difficultyChoice.setItems(difficulties);
-//        eyeColorChoice.setItems(colors);
         difficultyChoice.setValue(labModel.getDifficulty());
         eyeColorChoice.setValue(labModel.getEyeColor());
         setPerson();
@@ -148,8 +146,6 @@ public class EditController implements Initializable {
         }
     }
 
-
-
     public void setPerson() {
         difficultyChoice.setItems(difficulties);
         eyeColorChoice.setItems(colors);
@@ -166,6 +162,5 @@ public class EditController implements Initializable {
 
     public static void setLab(LabModel l) {
         labModel = l;
-
     }
 }
