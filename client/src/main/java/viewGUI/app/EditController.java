@@ -167,6 +167,6 @@ public class EditController implements Initializable {
 
     public static void setLab(LabModel l) {
         labModel = l;
-        System.out.println(l);
+
     }
 }

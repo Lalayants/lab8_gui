@@ -21,7 +21,6 @@ public class LoginWindow extends Application {
     public static int id;
     public static Stage prStage;
     public static ResourceBundle resourceBundle;
-//    public static Stage prStage;
 
     public static void show(ClientN clientN, Session s) {
         LoginWindow.clientN = clientN;
@@ -31,10 +30,8 @@ public class LoginWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
-        Locale en_AU = new Locale("en", "AU");
-        resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", en_AU);
-
+//        Locale en_AU = new Locale("en", "AU");
+        resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
         prStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("login.fxml"), resourceBundle);
         primaryStage.setTitle("Authorisation");
