@@ -107,7 +107,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        languages = FXCollections.observableArrayList("English", "Russian", "Sweden","Language");
+        languages = FXCollections.observableArrayList("English", "Russian", "Sweden", "Belorussian","Language");
         languageChoice.setItems(languages);
         languageChoice.setValue("Language");
         languageChoice.setOnAction(this::changeLanguage);
@@ -122,6 +122,9 @@ public class LoginController implements Initializable {
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
         } else if(languageChoice.getValue().equals("Sweden")){
             LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("se", "SE"));
+        }
+        else if(languageChoice.getValue().equals("Belorussian")){
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("by", "BY"));
         }
         try {
             LoginWindow.prStage.setTitle(LoginWindow.resourceBundle.getString("authorization"));
