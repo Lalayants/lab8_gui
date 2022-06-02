@@ -1,5 +1,6 @@
 package model;
 
+import controller.ClientN;
 import controller.UpdateWaiter;
 import entity.LabWorkDTO;
 import javafx.collections.FXCollections;
@@ -42,6 +43,7 @@ public class Session {
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 
@@ -88,6 +90,20 @@ public class Session {
         }
 
     }
+//    public void sentRequest(Request req)  {
+//        try {
+//            req.setLogin(login);
+//            oos.writeObject(req);
+//            oos.flush();
+//        }catch (IOException e){
+//            addToLog(req);
+//            if lo
+//            try {
+//            setStreams(socket);
+//                setLabModels();
+//            } catch (IOException ignored) {}
+//        }
+//    }
 
     public void sentRequest(Request req) throws IOException {
         req.setLogin(login);
@@ -218,140 +234,3 @@ public class Session {
     }
 
 }
-
-//public class Session {
-//    private static ObjectOutputStream oos;
-//    private static ObjectInputStream in;
-//    private static String login = "sync";
-//    private static int id = -1;
-//
-//    public static int getId() {
-//        return id;
-//    }
-//
-//    public static void setId(int id) {
-//        Session.id = id;
-//    }
-//
-//    private static Socket socket;
-//    private static final Vector<Request> log = new Vector<>();
-//
-//    public static ObservableList<LabModel> getLabModels() {
-//        return labModels;
-//    }
-//    public static void close(){
-//        try {
-//            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void setLabModels(ArrayList<LabWorkDTO> labModels) {
-//        ArrayList<LabModel> list =  new ArrayList<>();
-//        for (LabWorkDTO a : labModels){
-//            LabModel model = new LabModel();
-//            model.setId(a.getId());
-//            model.setName(a.getName());
-//            model.setX(a.getX());
-//            model.setY(a.getY());
-//            model.setCreationDate(a.getCreationDate());
-//            model.setMinimalPoint(a.getMinimalPoint());
-//            model.setPersonalQualitiesMinimum(a.getPersonalQualitiesMinimum());
-//            model.setDifficulty(a.getDifficulty());
-//            model.setAuthor(a.getAuthor());
-//            model.setBirthday(a.getBirthday());
-//            model.setWeight(a.getWeight());
-//            model.setEyeColor(a.getEyeColor());
-//            model.setCreators_id(a.getCreators_id());
-//            System.out.println(a.getBirthday() + " " + a.getCreators_id());
-//            list.add(model);
-//            System.out.println(model);
-//        }
-//
-//        Session.labModels = FXCollections.observableArrayList(list);
-//        System.out.println(labModels);
-//    }
-//
-//    private static ObservableList<LabModel> labModels = FXCollections.observableArrayList();
-//
-//    public static void prepareSession(int port) throws IOException {
-//        InetAddress address = InetAddress.getByName(null);
-//        socket = new Socket(address, port);
-//        setStreams(socket);
-//        System.out.println("Ставлю лабы");
-//        setLabModels();
-//    }
-//
-//    public static void setStreams(Socket socket) {
-//        try {
-//            oos = new ObjectOutputStream(socket.getOutputStream());
-//            in = new ObjectInputStream(socket.getInputStream());
-//            UpdateWaiter waiter = new UpdateWaiter(in);
-//            Thread updaiter = new Thread(waiter);
-//            updaiter.start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    public static void sentRequest(Request req) throws IOException {
-//        req.setLogin(login);
-//        oos.writeObject(req);
-//        oos.flush();
-//    }
-//
-//    public static Object receiveAnswer() throws IOException {
-//        try {
-//            return in.readObject();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    public static void shutDown() {
-//        System.exit(0);}
-//
-//    public static Vector<Request> getLog() {
-//        return log;
-//    }
-//
-//    public static int getLogSize() {
-//        return log.size();
-//    }
-//
-//    public static void addToLog(Request r) {
-//        log.add(r);
-//    }
-//
-//    public static void setLogin(String lgn) {
-//        login = lgn;}
-//
-//    public static String getLogin() {
-//        return login;
-//    }
-//
-//    public static void setLabModels() throws IOException {
-//        sentRequest(new Request("show", null));
-////        setLabModels((ArrayList<LabWorkDTO>) receiveAnswer());
-//    }
-//    public static void update(Response response){
-//        String command = response.getCommand();
-//        if (command.equals("show")){
-//            setLabModels((ArrayList<LabWorkDTO>) response.getObjectAnswer());
-//        }else if(command.equals("login")){
-//            try{
-//                System.out.println(response.getAnswer());
-//                id = Integer.parseInt(response.getAnswer());
-//                new LoginController().loadSecond();
-//            } catch (ClassCastException e){
-//                new LoginController().setText("Неправильный логин или пароль");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//
-//}

@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import model.Session;
-import viewGUI.app.AppController;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -15,7 +14,6 @@ import java.util.ResourceBundle;
 
 public class LoginWindow extends Application {
 
-    private Stage primaryStage;
     public static ClientN clientN;
     public static Session session;
     public static int id;
@@ -30,7 +28,6 @@ public class LoginWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-//        Locale en_AU = new Locale("en", "AU");
         resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
         prStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("login.fxml"), resourceBundle);

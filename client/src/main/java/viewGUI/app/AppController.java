@@ -42,11 +42,9 @@ import java.util.Vector;
 
 public class AppController {
     private int creators_id;
-    AnimationTimer loop;
     private static String login;
-    private Vector<Color> colors = new Vector<>();
-    private Vector<Rect> rectangles = new Vector<>();
-    private ArrayList<Integer> drawnIDs = new ArrayList<>();
+    private final Vector<Color> colors = new Vector<>();
+    private final ArrayList<Integer> drawnIDs = new ArrayList<>();
     public static ObservableList<Float> listOfX = FXCollections.observableArrayList();
     public static ObservableList<Long> listOfY = FXCollections.observableArrayList();
     public static ObservableList<Integer> listOfId = FXCollections.observableArrayList();
@@ -217,7 +215,7 @@ public class AppController {
     private void redrawObjects() {
         redrawPlain();
         drawnBefore();
-        Integer id = null;// TODO: 6/2/22 из ListOfId найти тот, которого нет в drawnIDs, для него запустить анимацию, внутри которой запускать drawnBefore и redrawPlain, после конца анимации добавить в лист нарисованных
+        Integer id = null;
         for (int i = 0; i < listOfX.size(); i++) {
             if (!drawnIDs.contains(listOfId.get(i))) {
                 double sizeHalf = listOfWeight.get(i) / 2;

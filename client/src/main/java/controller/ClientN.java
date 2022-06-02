@@ -33,7 +33,7 @@ public class ClientN {
             LoginWindow.show(this, session);
         } catch (IOException  e) {
             ConsoleIO.ConsoleOut("Сервер недоступен");
-            session.close();
+//            session.close();
             SorryWindow.show();
             System.exit(0);
         }
