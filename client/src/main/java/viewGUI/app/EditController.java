@@ -151,7 +151,6 @@ public class EditController implements Initializable {
 
 
     public void setPerson() {
-
         difficultyChoice.setItems(difficulties);
         eyeColorChoice.setItems(colors);
         nameField.setText(labModel.getName());
