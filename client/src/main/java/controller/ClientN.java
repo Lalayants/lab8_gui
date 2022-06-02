@@ -53,21 +53,19 @@ public class ClientN {
             shutDown();
         }
     }
-
-    public void add(){
-
-    }
-
-    public void remove(Request req){
-        try {
-            session.sentRequest(req);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+//    public void add(){
+//
+//    }
+//    public void remove(Request req){
+//        try {
+//            session.sentRequest(req);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
     public void giveSessionToSent(Request req){
         try {
+            request = req;
             session.sentRequest(req);
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,9 +81,9 @@ public class ClientN {
                     try {
                         request = logIterator.next();
                         sentToServerLog();
-                        String s = (String) session.receiveAnswer();
+//                        String s = (String) session.receiveAnswer();
                         logIterator.remove();
-                        System.out.println("++++++++++++++++++++++++++++\n" + "Из лога выполнена команда " + request.getCommand_name() + ". Результат:\n" + s + "\n++++++++++++++++++++++++++++");
+                        System.out.println("++++++++++++++++++++++++++++\n" + "Из лога выполнена команда " + request.getCommand_name());
                     } catch (IOException ignored) {
                     }
                 }

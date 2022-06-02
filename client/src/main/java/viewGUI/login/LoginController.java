@@ -52,9 +52,12 @@ public class LoginController implements Initializable {
 
     public void registerButtonOnAction(ActionEvent event) throws InterruptedException, IOException {
         LoginWindow.session.setId(-1);
-        getAnwser(usernameTextField.getText(), passwordTextField.getText(), "register");
-        LoginWindow.id = LoginWindow.session.getId();
-        loginMessageLabel.setText(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+        if (!usernameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty()) {
+            getAnwser(usernameTextField.getText(), passwordTextField.getText(), "register");
+            LoginWindow.id = LoginWindow.session.getId();
+            loginMessageLabel.setText(LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
+        }else
+            loginMessageLabel.setText(LoginWindow.resourceBundle.getString("loginErrorEmptyField"));
     }
 
     public void loginButtonOnAction(ActionEvent event) throws InterruptedException, IOException {
