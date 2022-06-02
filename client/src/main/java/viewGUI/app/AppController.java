@@ -288,7 +288,12 @@ public class AppController {
         graphicsContext.strokeLine(0, tabMap.getHeight() / 2, tabMap.getWidth(), tabMap.getHeight() / 2);
         graphicsContext.strokeLine(tabMap.getWidth() / 2, 0, tabMap.getWidth() / 2, tabMap.getHeight());
         graphicsContext.strokeLine(tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 - 5, tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 + 5);
-        graphicsContext.strokeText("10", tabMap.getWidth() / 2 + 3, tabMap.getHeight() / 2 + 18);
+        graphicsContext.strokeText("10", tabMap.getWidth() / 2 + 5, tabMap.getHeight() / 2 + 18, 10);
+
+        graphicsContext.strokeLine(tabMap.getWidth()/2 - 10, 10, tabMap.getWidth()/2, 0);
+        graphicsContext.strokeLine(tabMap.getWidth()/2 + 10, 10, tabMap.getWidth()/2, 0);
+        graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight()/2+10, tabMap.getWidth(), tabMap.getHeight()/2);
+        graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight()/2-10, tabMap.getWidth(), tabMap.getHeight()/2);
     }
 
 
