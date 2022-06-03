@@ -35,6 +35,7 @@ import viewGUI.login.LoginWindow;
 import java.lang.reflect.*;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -101,6 +102,8 @@ public class AppController {
     private void initialize() {
         usersLogin.setText(login);
 
+        LoginWindow.formater = NumberFormat.getInstance(LoginWindow.locale);
+
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().creationDateProperty());
@@ -141,7 +144,7 @@ public class AppController {
                 }
                 redrawObjects();
             }
-        });
+        }); //listener for observable list
 
         for (LabModel item : labModelTableView.getItems()) {
             drawnIDs.add(item.getId());
@@ -150,8 +153,9 @@ public class AppController {
             listOfId.add(item.getId());
             listOfWeight.add(item.getWeight());
             listOfCreatorsId.add(item.getCreators_id());
-        }
-        labModelTableView.getSelectionModel().selectedItemProperty().addListener(
+        } //all current labs info needed for drawing
+
+        labModelTableView.getSelectionModel().selectedItemProperty().addListener(   //shows data in Details
                 (observable, oldValue, newValue) -> showPersonDetails(newValue));
 
         labModelTableView.setRowFactory(tv -> {
@@ -167,27 +171,27 @@ public class AppController {
                 }
             });
             return row;
-        });
+        }); // double click reaction
 
         tabMap.widthProperty().addListener((obs, oldVal, newVal) -> {
             redrawObjects();
-        });
+        }); //listener that changes canvas size
         tabMap.heightProperty().addListener((obs, oldVal, newVal) -> {
             redrawObjects();
         });
         graphicsContext = objectCanvas.getGraphicsContext2D();
         graphicsContext.setFont(Font.font("Arial"));
-        Field[] colorsField = Color.class.getDeclaredFields();
+
+        Field[] colorsField = Color.class.getDeclaredFields(); //all colors
         for (int i = 7; i < colorsField.length - 10; i++) {
             try {
                 this.colors.add((Color) colorsField[i].get(Color.class));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-
         }
 
-        objectCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
+        objectCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, //mouse click on map
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
@@ -287,12 +291,11 @@ public class AppController {
         graphicsContext.strokeLine(tabMap.getWidth() / 2, 0, tabMap.getWidth() / 2, tabMap.getHeight());
         graphicsContext.strokeLine(tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 - 5, tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 + 5);
         graphicsContext.strokeText("10", tabMap.getWidth() / 2 + 5, tabMap.getHeight() / 2 + 18, 10);
-        graphicsContext.strokeLine(tabMap.getWidth()/2 - 10, 10, tabMap.getWidth()/2, 0);
-        graphicsContext.strokeLine(tabMap.getWidth()/2 + 10, 10, tabMap.getWidth()/2, 0);
-        graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight()/2+10, tabMap.getWidth(), tabMap.getHeight()/2);
-        graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight()/2-10, tabMap.getWidth(), tabMap.getHeight()/2);
+        graphicsContext.strokeLine(tabMap.getWidth() / 2 - 10, 10, tabMap.getWidth() / 2, 0);
+        graphicsContext.strokeLine(tabMap.getWidth() / 2 + 10, 10, tabMap.getWidth() / 2, 0);
+        graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight() / 2 + 10, tabMap.getWidth(), tabMap.getHeight() / 2);
+        graphicsContext.strokeLine(tabMap.getWidth() - 10, tabMap.getHeight() / 2 - 10, tabMap.getWidth(), tabMap.getHeight() / 2);
     }
-
 
     @FXML
     private void handleEditLabWork() {
@@ -331,14 +334,14 @@ public class AppController {
             idTextField.setText(String.valueOf(labWork.getId()));
             nameTextField.setText(labWork.getName());
             creationDateTextField.setText(labWork.getCreationDate().toString());
-            xTextField.setText(String.valueOf(labWork.getX()));
+            xTextField.setText(LoginWindow.formater.format(labWork.getX()));
             yTextField.setText(String.valueOf(labWork.yProperty().get()));
-            minimalPointTextField.setText(String.valueOf(labWork.getMinimalPoint()));
+            minimalPointTextField.setText(LoginWindow.formater.format(labWork.getMinimalPoint()));
             personalPointTextField.setText(String.valueOf(labWork.getPersonalQualitiesMinimum()));
             difficultyTextField.setText(labWork.getDifficulty());
             authorTextField.setText(labWork.getAuthor());
             eyeColorTextField.setText(labWork.getEyeColor());
-            weightTextField.setText(String.valueOf(labWork.getWeight()));
+            weightTextField.setText(LoginWindow.formater.format(labWork.getWeight()));
             creators_id = labWork.getCreators_id();
         } else {
             idTextField.setText("");

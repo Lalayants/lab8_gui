@@ -17,6 +17,7 @@ import viewGUI.login.LoginWindow;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ResourceBundle;
 
 public class EditController implements Initializable {
@@ -85,9 +86,11 @@ public class EditController implements Initializable {
             mistake += LoginWindow.resourceBundle.getString("xFillError");
         } else {
             try {
+
                 float xx = Float.parseFloat(x);
+//                float xx = (float) LoginWindow.formater.parse(x);
                 labModel.setX(xx);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException  e) {
                 mistake += LoginWindow.resourceBundle.getString("xFillError");
             }
         }
@@ -96,8 +99,9 @@ public class EditController implements Initializable {
         } else {
             try {
                 float wght = Float.parseFloat(weight);
+//                float wght = (float) LoginWindow.formater.parse(weight);
                 labModel.setWeight(wght);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException  e) {
                 mistake += LoginWindow.resourceBundle.getString("weightFillError");
             }
         }
@@ -106,8 +110,9 @@ public class EditController implements Initializable {
         } else {
             try {
                 Long yy = Long.parseLong(y);
+//                Long yy = (Long) LoginWindow.formater.parse(y);
                 labModel.setY(yy);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException  e) {
                 mistake += LoginWindow.resourceBundle.getString("yFillError");
             }
         }
@@ -116,8 +121,9 @@ public class EditController implements Initializable {
         } else {
             try {
                 int persPoint = Integer.parseInt(personalPoint);
+//                int persPoint = (int) LoginWindow.formater.parse(personalPoint);
                 labModel.setPersonalQualitiesMinimum(persPoint);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException  e) {
                 mistake += LoginWindow.resourceBundle.getString("personalPointFillError");
             }
         }
@@ -126,8 +132,9 @@ public class EditController implements Initializable {
         } else {
             try {
                 float minPoint = Float.parseFloat(minimalPoint);
+//                float minPoint = (float) LoginWindow.formater.parse(minimalPoint);
                 labModel.setMinimalPoint(minPoint);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException  e) {
                 mistake += LoginWindow.resourceBundle.getString("minimalPointFillError");
             }
         }

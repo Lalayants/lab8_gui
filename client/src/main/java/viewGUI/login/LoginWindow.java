@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import model.Session;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,6 +20,8 @@ public class LoginWindow extends Application {
     public static int id;
     public static Stage prStage;
     public static ResourceBundle resourceBundle;
+    public static Locale locale;
+    public static NumberFormat formater;
 
     public static void show(ClientN clientN, Session s) {
         LoginWindow.clientN = clientN;
@@ -28,7 +31,8 @@ public class LoginWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
+        locale = new Locale("en", "AU");
+        resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", locale);
         prStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("login.fxml"), resourceBundle);
         primaryStage.setTitle("Authorisation");

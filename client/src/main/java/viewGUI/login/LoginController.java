@@ -111,14 +111,19 @@ public class LoginController implements Initializable {
     }
 
     public void changeLanguage(ActionEvent event) {
-        if (languageChoice.getValue().equals("Russian"))
-            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("ru", "RU"));
-        else if (languageChoice.getValue().equals("English"))
-            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("en", "AU"));
-        else if (languageChoice.getValue().equals("Sweden"))
-            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("se", "SE"));
-        else if (languageChoice.getValue().equals("Belorussian"))
-            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", new Locale("by", "BY"));
+        if (languageChoice.getValue().equals("Russian")) {
+            LoginWindow.locale = new Locale("ru", "RU");
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", LoginWindow.locale);
+        } else if (languageChoice.getValue().equals("English")) {
+            LoginWindow.locale =new Locale("en", "AU");
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", LoginWindow.locale);
+        }else if (languageChoice.getValue().equals("Sweden")) {
+            LoginWindow.locale =new Locale("se", "SE");
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", LoginWindow.locale);
+        }else if (languageChoice.getValue().equals("Belorussian")) {
+            LoginWindow.locale =new Locale("by", "BY");
+            LoginWindow.resourceBundle = ResourceBundle.getBundle("viewGUI.app.res.Bundle", LoginWindow.locale);
+        }
 
         try {
             LoginWindow.prStage.setTitle(LoginWindow.resourceBundle.getString("authorization"));
