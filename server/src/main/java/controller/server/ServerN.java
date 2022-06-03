@@ -20,7 +20,7 @@ public class ServerN {
     private ServerSocket serverSocket;
     private final ReentrantLock lock = new ReentrantLock();
     public static int PORT = 8085;
-    private static HashMap<Socket, ObjectOutputStream> activeConnections= new HashMap<>();
+    private static final HashMap<Socket, ObjectOutputStream> activeConnections= new HashMap<>();
 
 
     /**

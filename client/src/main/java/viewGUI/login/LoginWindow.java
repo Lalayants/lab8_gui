@@ -21,7 +21,7 @@ public class LoginWindow extends Application {
     public static Stage prStage;
     public static ResourceBundle resourceBundle;
     public static Locale locale;
-    public static NumberFormat formater;
+    public static NumberFormat formatter;
 
     public static void show(ClientN clientN, Session s) {
         LoginWindow.clientN = clientN;

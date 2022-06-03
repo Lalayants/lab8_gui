@@ -5,7 +5,6 @@ import javafx.beans.property.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
 public class LabModel implements Serializable {
     private IntegerProperty id;
@@ -17,27 +16,11 @@ public class LabModel implements Serializable {
     private IntegerProperty personalQualitiesMinimum; //Поле не может быть null, Значение поля должно быть больше 0
     private StringProperty difficulty; //Поле не может быть null
     private StringProperty author; //Поле не может быть null, Строка не может быть пустой
-    //    private ObjectProperty<LocalDate> birthday; //Поле может быть null
     private FloatProperty weight; //Значение поля должно быть больше 0
     private StringProperty eyeColor; //Поле может быть null
     private IntegerProperty creators_id;
 
-    //    public LabModel(LabWorkDTO lab){
-//        id = new SimpleIntegerProperty(lab.getId());
-//        name = new SimpleStringProperty(lab.getName());
-//        x = new SimpleFloatProperty(lab.getCoordinates().getX());
-//        y = new SimpleLongProperty(lab.getCoordinates().getY());
-//        creationDate = new SimpleObjectProperty<ZonedDateTime>(lab.getCreationDate());
-//        minimalPoint = new SimpleDoubleProperty(lab.getMinimalPoint());
-//        personalQualitiesMinimum = new SimpleLongProperty(lab.getMinimalPoint());
-//        difficulty = new SimpleStringProperty(lab.getDifficulty().name());
-//        author = new SimpleStringProperty(lab.getAuthor().getName());
-//        birthday = new SimpleObjectProperty<LocalDate>(lab.getAuthor().getBirthday());
-//        weight = new SimpleFloatProperty(lab.getAuthor().getWeight());
-//        eyeColor = new SimpleStringProperty(lab.getAuthor().getEyeColor().name());
-//        creators_id = new SimpleIntegerProperty(lab.getCreators_id());
-//    }
-    public LabModel(LabWorkDTO lab){
+    public LabModel(LabWorkDTO lab) {
         setId(lab.getId());
         setX(lab.getX());
         setY(lab.getY());
@@ -50,9 +33,11 @@ public class LabModel implements Serializable {
         setWeight(lab.getWeight());
         try {
             setEyeColor(lab.getEyeColor());
-        }catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
         setCreators_id(lab.getCreators_id());
     }
+
     public LabWorkDTO toDTO() {
         LabWorkDTO labWorkDTO = new LabWorkDTO();
         labWorkDTO.setName(name.get());
@@ -65,32 +50,17 @@ public class LabModel implements Serializable {
         labWorkDTO.setWeight(weight.get());
         try {
             labWorkDTO.setId(id.get());
-        }catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
         try {
             labWorkDTO.setCreationDate(creationDate.get());
-        }catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
         try {
             labWorkDTO.setEyeColor(eyeColor.get());
-        }catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
         return labWorkDTO;
-    }
-
-    public LabModel(IntegerProperty id, StringProperty name, FloatProperty x, LongProperty y, ObjectProperty<Timestamp> creationDate,
-                    FloatProperty minimalPoint, IntegerProperty personalQualitiesMinimum, StringProperty difficulty, StringProperty author,
-                    ObjectProperty<LocalDate> birthday, FloatProperty weight, StringProperty eyeColor, IntegerProperty creators_id) {
-        this.id = id;
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.creationDate = creationDate;
-        this.minimalPoint = minimalPoint;
-        this.personalQualitiesMinimum = personalQualitiesMinimum;
-        this.difficulty = difficulty;
-        this.author = author;
-//        this.birthday = birthday;
-        this.weight = weight;
-        this.eyeColor = eyeColor;
-        this.creators_id = creators_id;
     }
 
     public LabModel() {
@@ -154,7 +124,7 @@ public class LabModel implements Serializable {
     }
 
     public void setCreationDate(Timestamp creationDate) {
-        this.creationDate = new SimpleObjectProperty<Timestamp>(creationDate);
+        this.creationDate = new SimpleObjectProperty<>(creationDate);
     }
 
     public double getMinimalPoint() {
@@ -205,18 +175,6 @@ public class LabModel implements Serializable {
         this.author = new SimpleStringProperty(author);
     }
 
-//    public LocalDate getBirthday() {
-//        return birthday.get();
-//    }
-
-//    public ObjectProperty<LocalDate> birthdayProperty() {
-//        return birthday;
-//    }
-
-//    public void setBirthday(LocalDate birthday) {
-//        this.birthday = new SimpleObjectProperty<LocalDate>(birthday);
-//    }
-
     public float getWeight() {
         return weight.get();
     }
@@ -265,7 +223,6 @@ public class LabModel implements Serializable {
                 ", personalQualitiesMinimum=" + personalQualitiesMinimum +
                 ", difficulty=" + difficulty +
                 ", author=" + author +
-//                ", birthday=" + birthday +
                 ", weight=" + weight +
                 ", eyeColor=" + eyeColor +
                 ", creators_id=" + creators_id +

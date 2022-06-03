@@ -14,21 +14,6 @@ public class ConsoleIO {
         System.out.println(s);
     }
 
-
-    //    public static String ConsoleIn(){
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//        try {
-//            return reader.readLine();
-//        } catch (NoSuchElementException | IOException e) {
-//            try {
-//                System.in.reset();
-//            } catch (IOException ex) {
-//                System.out.println("Завершение работы.");
-//                return "exit";
-//            }
-//            return "";
-//        }
-//    }
     public static String ConsoleIn() {
         System.out.print("> ");
         try {

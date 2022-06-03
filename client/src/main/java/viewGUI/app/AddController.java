@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.LabModel;
@@ -18,6 +17,7 @@ import viewGUI.login.LoginWindow;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AddController implements Initializable {
@@ -52,8 +52,8 @@ public class AddController implements Initializable {
         String author = authorField.getText();
         String personalPoint = personalPointField.getText();
         String minimalPoint = minimalPointField.getText();
-        String difficulty = (String) difficultyChoice.getValue();
-        String eyeColor = (String) eyeColorChoice.getValue();
+        String difficulty = difficultyChoice.getValue();
+        String eyeColor = eyeColorChoice.getValue();
         if (name == null || name.isEmpty()) {
             mistake += LoginWindow.resourceBundle.getString("nameFillError");
         } else {
@@ -96,7 +96,7 @@ public class AddController implements Initializable {
             mistake += LoginWindow.resourceBundle.getString("yFillError");
         } else {
             try {
-                Long yy = Long.parseLong(y);
+                long yy = Long.parseLong(y);
                 labModel.setY(yy);
             } catch (NumberFormatException e) {
                 mistake += LoginWindow.resourceBundle.getString("yFillError");
@@ -128,10 +128,10 @@ public class AddController implements Initializable {
             try {
                 LoginWindow.clientN.giveSessionToSent(new Request("add", enteredLabModel.toDTO()));
             } catch (IOException e) {
-                Parent root = null;
+                Parent root;
                 cancelButtonOnAction();
                 try {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("sorry.fxml")));
                 LoginWindow.prStage.setTitle("Простите, мы все сломали");
                 Scene a = new Scene(root, 600, 400);
                 a.getRoot().setStyle("-fx-font-family: 'arial'");
@@ -165,8 +165,8 @@ public class AddController implements Initializable {
         String author = authorField.getText();
         String personalPoint = personalPointField.getText();
         String minimalPoint = minimalPointField.getText();
-        String difficulty = (String) difficultyChoice.getValue();
-        String eyeColor = (String) eyeColorChoice.getValue();
+        String difficulty = difficultyChoice.getValue();
+        String eyeColor = eyeColorChoice.getValue();
         if (name == null || name.isEmpty()) {
             mistake += LoginWindow.resourceBundle.getString("nameFillError");
         } else {
@@ -209,7 +209,7 @@ public class AddController implements Initializable {
             mistake += LoginWindow.resourceBundle.getString("yFillError");
         } else {
             try {
-                Long yy = Long.parseLong(y);
+                long yy = Long.parseLong(y);
                 labModel.setY(yy);
             } catch (NumberFormatException e) {
                 mistake += LoginWindow.resourceBundle.getString("yFillError");
@@ -248,10 +248,10 @@ public class AddController implements Initializable {
                 AppController.showInfoAlert(LoginWindow.resourceBundle.getString("success"),LoginWindow.resourceBundle.getString("removeLower"), LoginWindow.resourceBundle.getString(LoginWindow.session.messageForClient));
 
             } catch (IOException e) {
-                Parent root = null;
+                Parent root;
                 cancelButtonOnAction();
                 try {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("sorry.fxml")));
                     LoginWindow.prStage.setTitle("Простите, мы все сломали");
                     Scene a = new Scene(root, 600, 400);
                     a.getRoot().setStyle("-fx-font-family: 'arial'");
@@ -285,8 +285,8 @@ public class AddController implements Initializable {
         String author = authorField.getText();
         String personalPoint = personalPointField.getText();
         String minimalPoint = minimalPointField.getText();
-        String difficulty = (String) difficultyChoice.getValue();
-        String eyeColor = (String) eyeColorChoice.getValue();
+        String difficulty = difficultyChoice.getValue();
+        String eyeColor = eyeColorChoice.getValue();
         if (name == null || name.isEmpty()) {
             mistake += LoginWindow.resourceBundle.getString("nameFillError");
         } else {
@@ -329,7 +329,7 @@ public class AddController implements Initializable {
             mistake += LoginWindow.resourceBundle.getString("yFillError");
         } else {
             try {
-                Long yy = Long.parseLong(y);
+                long yy = Long.parseLong(y);
                 labModel.setY(yy);
             } catch (NumberFormatException e) {
                 mistake += LoginWindow.resourceBundle.getString("yFillError");
@@ -369,10 +369,10 @@ public class AddController implements Initializable {
 
             } catch (IOException e) {
                 cancelButtonOnAction();
-                Parent root = null;
+                Parent root;
                 cancelButtonOnAction();
                 try {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
+                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("sorry.fxml")));
                     LoginWindow.prStage.setTitle("Простите, мы все сломали");
                     Scene a = new Scene(root, 600, 400);
                     a.getRoot().setStyle("-fx-font-family: 'arial'");
@@ -386,6 +386,7 @@ public class AddController implements Initializable {
 
         }
         else {
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             Scene scene = alert.getDialogPane().getScene();
             scene.getRoot().setStyle("-fx-font-family: 'arial'");

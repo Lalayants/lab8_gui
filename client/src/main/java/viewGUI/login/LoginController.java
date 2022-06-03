@@ -52,7 +52,7 @@ public class LoginController implements Initializable {
             loginMessageLabel.setText(LoginWindow.resourceBundle.getString("loginErrorEmptyField"));
     }
 
-    public void loginButtonOnAction(ActionEvent event) throws InterruptedException, IOException {
+    public void loginButtonOnAction(ActionEvent event) throws IOException {
         LoginWindow.session.setId(-1);
         if (getAnwser(usernameTextField.getText(), passwordTextField.getText(), "login")) {
             try {

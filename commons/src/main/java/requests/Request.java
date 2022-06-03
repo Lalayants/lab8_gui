@@ -7,9 +7,6 @@ import java.io.Serializable;
 /**
  * It's a class that represents a request to the server
  */
-/**
- * It's a class that represents a request to the server
- */
 public class Request implements Serializable {
     private String command_name;
     private String login;
@@ -18,8 +15,6 @@ public class Request implements Serializable {
     public Request() {
 
     }
-//    private Object extra;
-//    private String password;
 
     public String getLogin() {
         return login;

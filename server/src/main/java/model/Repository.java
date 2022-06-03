@@ -16,7 +16,6 @@ public class Repository {
             LabWorkDTO lab = a;
             a.setCreators_id(Integer.parseInt(login));
             a.setCreationDate(Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime()));
-//            Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kpop");
             Connection c = TableCreator.getConnection();
             String CreateInSql = "INSERT INTO LabWorks(name, x, y, creation_date, minimalPoint, personalQualitiesMinimum, difficulty, author_name,\n" +
                     "                     birthday, weight, eye_color, login_id)\n" +

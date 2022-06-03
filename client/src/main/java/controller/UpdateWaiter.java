@@ -5,15 +5,12 @@ import requests.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.concurrent.CountDownLatch;
 
-import static java.lang.Thread.sleep;
-
-public class UpdateWaiter implements Runnable{
+public class UpdateWaiter implements Runnable {
     ObjectInputStream inputStream;
     Session session;
     Thread sessionThread;
-    CountDownLatch countDownLatch;
+
     public UpdateWaiter(ObjectInputStream objectInputStream, Session ses, Thread thread) {
         inputStream = objectInputStream;
         session = ses;
@@ -24,9 +21,9 @@ public class UpdateWaiter implements Runnable{
     public void run() {
         while (true) {
             try {
-                        Response response = (Response) inputStream.readObject();
-                        session.updateCollection(response);
-            } catch (IOException | NullPointerException | ClassNotFoundException  ignored) {
+                Response response = (Response) inputStream.readObject();
+                session.updateCollection(response);
+            } catch (IOException | NullPointerException | ClassNotFoundException ignored) {
 
             }
         }

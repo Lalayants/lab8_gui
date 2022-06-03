@@ -74,7 +74,6 @@ public class Bundle_ru_RU extends ListResourceBundle {
                 {"Имя пользователя занято", "Имя пользователя занято"},
                 {"loginErrorEmptyField", "Оба поля должны быть заполнены"},
                 {"Неверный логин или пароль", "Неверный логин или пароль"},
-
                 {"commandTab", "Other commands"},
                 {"removeLower", "Убрать наименьший"},
                 {"addIfMin", "Добавить, если мин"},

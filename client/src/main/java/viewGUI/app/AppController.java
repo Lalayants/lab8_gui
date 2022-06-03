@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,9 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,9 +27,8 @@ import model.LabModel;
 import requests.Request;
 import viewGUI.login.LoginWindow;
 
-
-import java.lang.reflect.*;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -69,7 +64,9 @@ public class AppController {
     @FXML
     private TableView<LabModel> labModelTableView;
     @FXML
-    private Button addButton, clearButton, editButton, removeButton;
+    private Button addButton;
+    @FXML
+    private Button editButton;
     @FXML
     private TextField idTextField, nameTextField, creationDateTextField, xTextField, yTextField, minimalPointTextField,
             personalPointTextField, difficultyTextField, authorTextField, weightTextField, eyeColorTextField;
@@ -102,7 +99,7 @@ public class AppController {
     private void initialize() {
         usersLogin.setText(login);
 
-        LoginWindow.formater = NumberFormat.getInstance(LoginWindow.locale);
+        LoginWindow.formatter = NumberFormat.getInstance(LoginWindow.locale);
 
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -173,12 +170,8 @@ public class AppController {
             return row;
         }); // double click reaction
 
-        tabMap.widthProperty().addListener((obs, oldVal, newVal) -> {
-            redrawObjects();
-        }); //listener that changes canvas size
-        tabMap.heightProperty().addListener((obs, oldVal, newVal) -> {
-            redrawObjects();
-        });
+        tabMap.widthProperty().addListener((obs, oldVal, newVal) -> redrawObjects()); //listener that changes canvas size
+        tabMap.heightProperty().addListener((obs, oldVal, newVal) -> redrawObjects());
         graphicsContext = objectCanvas.getGraphicsContext2D();
         graphicsContext.setFont(Font.font("Arial"));
 
@@ -192,25 +185,21 @@ public class AppController {
         }
 
         objectCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, //mouse click on map
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent e) {
+                e -> {
 //                        System.out.println(e.getX() + " " + e.getY());
-                        ObservableList<LabModel> list = labModelTableView.getItems();
-                        boolean done = false;
-                        for (LabModel lab : list) {
-                            if (e.getX() < tabMap.getWidth() / 2 + lab.getX() + lab.getWeight() / 2 && e.getX() > tabMap.getWidth() / 2 + lab.getX() - lab.getWeight() / 2)
-                                if (e.getY() > tabMap.getHeight() / 2 - lab.getY() - lab.getWeight() / 2 && e.getY() < tabMap.getHeight() / 2 - lab.getY() + lab.getWeight() / 2) {
-                                    showPersonDetails(lab);
-                                    if (e.getButton().equals(MouseButton.PRIMARY)) {
-                                        handleEditLabWork();
-                                        break;
-                                    } else if (e.getButton().equals(MouseButton.SECONDARY)) {
-                                        handleDeleteLabWork();
-                                        break;
-                                    }
+                    ObservableList<LabModel> list = labModelTableView.getItems();
+                    for (LabModel lab : list) {
+                        if (e.getX() < tabMap.getWidth() / 2 + lab.getX() + lab.getWeight() / 2 && e.getX() > tabMap.getWidth() / 2 + lab.getX() - lab.getWeight() / 2)
+                            if (e.getY() > tabMap.getHeight() / 2 - lab.getY() - lab.getWeight() / 2 && e.getY() < tabMap.getHeight() / 2 - lab.getY() + lab.getWeight() / 2) {
+                                showPersonDetails(lab);
+                                if (e.getButton().equals(MouseButton.PRIMARY)) {
+                                    handleEditLabWork();
+                                    break;
+                                } else if (e.getButton().equals(MouseButton.SECONDARY)) {
+                                    handleDeleteLabWork();
+                                    break;
                                 }
-                        }
+                            }
                     }
                 });
     }
@@ -285,8 +274,6 @@ public class AppController {
         graphicsContext.setFill(Color.WHITE);
         graphicsContext.fillRect(0, 0, tabMap.getWidth(), tabMap.getHeight());
         graphicsContext.setFill(Color.BLACK);
-//        graphicsContext.strokeLine(0, tabMap.getHeight() / 2 - 100, tabMap.getWidth(), tabMap.getHeight() / 2 - 100);
-//        graphicsContext.strokeLine(tabMap.getWidth() / 2 + 100, 0, tabMap.getWidth() / 2 + 100, tabMap.getHeight());
         graphicsContext.strokeLine(0, tabMap.getHeight() / 2, tabMap.getWidth(), tabMap.getHeight() / 2);
         graphicsContext.strokeLine(tabMap.getWidth() / 2, 0, tabMap.getWidth() / 2, tabMap.getHeight());
         graphicsContext.strokeLine(tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 - 5, tabMap.getWidth() / 2 + 10, tabMap.getHeight() / 2 + 5);
@@ -303,8 +290,7 @@ public class AppController {
             Integer id = Integer.parseInt(idTextField.getText());
             if (creators_id == LoginWindow.id) {
                 EditController.setLab(activeLabWork);
-                String fxmlName = "LabWorkEditDialog";
-                Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource("EditDialog.fxml"), LoginWindow.resourceBundle);
+                Parent root1 = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("EditDialog.fxml")), LoginWindow.resourceBundle);
                 Stage stage = new Stage();
                 editStage = stage;
                 stage.setTitle(LoginWindow.resourceBundle.getString("editUtility"));
@@ -334,14 +320,14 @@ public class AppController {
             idTextField.setText(String.valueOf(labWork.getId()));
             nameTextField.setText(labWork.getName());
             creationDateTextField.setText(labWork.getCreationDate().toString());
-            xTextField.setText(LoginWindow.formater.format(labWork.getX()));
+            xTextField.setText(LoginWindow.formatter.format(labWork.getX()));
             yTextField.setText(String.valueOf(labWork.yProperty().get()));
-            minimalPointTextField.setText(LoginWindow.formater.format(labWork.getMinimalPoint()));
+            minimalPointTextField.setText(LoginWindow.formatter.format(labWork.getMinimalPoint()));
             personalPointTextField.setText(String.valueOf(labWork.getPersonalQualitiesMinimum()));
             difficultyTextField.setText(labWork.getDifficulty());
             authorTextField.setText(labWork.getAuthor());
             eyeColorTextField.setText(labWork.getEyeColor());
-            weightTextField.setText(LoginWindow.formater.format(labWork.getWeight()));
+            weightTextField.setText(LoginWindow.formatter.format(labWork.getWeight()));
             creators_id = labWork.getCreators_id();
         } else {
             idTextField.setText("");
@@ -361,13 +347,13 @@ public class AppController {
     @FXML
     private void handleDeleteLabWork() {
         try {
-            Integer id = Integer.parseInt(idTextField.getText());
+            int id = Integer.parseInt(idTextField.getText());
             if (creators_id == LoginWindow.id) {
-                Request request = new Request("remove_by_id", id.toString());
+                Request request = new Request("remove_by_id", Integer.toString(id));
                 try {
                     LoginWindow.clientN.giveSessionToSent(request);
                 } catch (IOException e) {
-                    Parent root = null;
+                    Parent root;
                     try {
                         root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
                         LoginWindow.prStage.setTitle("Простите, мы все сломали");
@@ -395,7 +381,7 @@ public class AppController {
             try {
                 LoginWindow.clientN.giveSessionToSent(new Request("clear", ""));
             } catch (IOException e) {
-                Parent root = null;
+                Parent root;
                 try {
                     root = FXMLLoader.load(getClass().getClassLoader().getResource("sorry.fxml"));
                     LoginWindow.prStage.setTitle("Простите, мы все сломали");

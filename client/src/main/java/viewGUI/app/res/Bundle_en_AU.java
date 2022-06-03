@@ -74,7 +74,6 @@ public class Bundle_en_AU extends ListResourceBundle {
                 {"Имя пользователя занято", "Username is already used"},
                 {"loginErrorEmptyField", "Both fields must be entered"},
                 {"Неверный логин или пароль", "Incorrect login or password"},
-
                 {"commandTab", "Other commands"},
                 {"removeLower", "Remove lower"},
                 {"addIfMin", "Add if min"},

@@ -17,7 +17,6 @@ import viewGUI.login.LoginWindow;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.ResourceBundle;
 
 public class EditController implements Initializable {
@@ -132,7 +131,6 @@ public class EditController implements Initializable {
         } else {
             try {
                 float minPoint = Float.parseFloat(minimalPoint);
-//                float minPoint = (float) LoginWindow.formater.parse(minimalPoint);
                 labModel.setMinimalPoint(minPoint);
             } catch (NumberFormatException  e) {
                 mistake += LoginWindow.resourceBundle.getString("minimalPointFillError");
@@ -147,11 +145,6 @@ public class EditController implements Initializable {
             AppController.listOfId.remove(index);
             AppController.listOfWeight.remove(index);
             AppController.listOfCreatorsId.remove(index);
-//            AppController.listOfX.remove(xPrevious);
-//            AppController.listOfCreatorsId.remove((Object)creatorsIdPrevious);
-//            AppController.listOfWeight.remove(weightPrevious);
-//            AppController.listOfY.remove(yPrevious);
-//            AppController.listOfId.remove((Object) idPrevious);
             enteredLabModel = labModel;
             try {
                 LoginWindow.clientN.giveSessionToSent(new Request("update", enteredLabModel.toDTO()));

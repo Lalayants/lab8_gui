@@ -74,7 +74,6 @@ public class Bundle_se_SE extends ListResourceBundle {
                 {"Имя пользователя занято", "Användarnamnet används redan"},
                 {"loginErrorEmptyField", "Båda fälten måste anges"},
                 {"Неверный логин или пароль", "Fel inloggning eller lösenord"},
-
                 {"commandTab", "Andra kommandon"},
                 {"removeLower", "Ta bort nedre"},
                 {"addIfMin", "Tillsätt om min"},
