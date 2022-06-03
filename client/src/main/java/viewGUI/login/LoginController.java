@@ -107,6 +107,7 @@ public class LoginController implements Initializable {
         languageChoice.setItems(languages);
         languageChoice.setValue("Language");
         languageChoice.setOnAction(this::changeLanguage);
+        loginButton.setDefaultButton(true);
     }
 
     public void changeLanguage(ActionEvent event) {

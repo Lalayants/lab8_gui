@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,6 +25,8 @@ public class EditController implements Initializable {
     ObservableList<String> colors = FXCollections.observableArrayList("BLACK", "BLUE", "YELLOW", "ORANGE", "BROWN");
     public LabModel enteredLabModel;
     @FXML
+    private Button editButton;
+    @FXML
     private TextField nameField, xField, yField, weightField, authorField,
             personalPointField, minimalPointField;
     @FXML
@@ -36,6 +39,7 @@ public class EditController implements Initializable {
         difficultyChoice.setValue(labModel.getDifficulty());
         eyeColorChoice.setValue(labModel.getEyeColor());
         setPerson();
+        editButton.setDefaultButton(true);
     }
 
     public void cancelButtonOnAction() {

@@ -100,7 +100,7 @@
 </children>
 </GridPane>
 <HBox layoutX="197.1875" layoutY="241.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
-<children><Button layoutX="197.1875" layoutY="241.0" mnemonicParsing="false" onAction="#editButtonOnAction" prefWidth="90.0" text="%editButton" /><Button layoutX="249.375" layoutY="241.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefWidth="90.0" text="%cancelButton" />
+<children><Button fx:id="editButton" layoutX="197.1875" layoutY="241.0" mnemonicParsing="false" onAction="#editButtonOnAction" prefWidth="90.0" text="%editButton" /><Button layoutX="249.375" layoutY="241.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefWidth="90.0" text="%cancelButton" />
 </children>
 </HBox>
 </children></AnchorPane>
