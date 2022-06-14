@@ -10,7 +10,18 @@ import java.sql.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
+/**
+ * Это класс, содержащий методы, взаимодействующие с базой данных.
+ */
 public class Repository {
+    /**
+     * Он добавляет новую лабораторную работу в базу данных
+     *
+     * @param a LabWorkDTO
+     * @param login логин пользователя, добавляющего лабораторную работу
+     * @return Ответ
+     */
+    // Метод, который добавляет лабораторную работу в базу данных.
     public static Response add(LabWorkDTO a, String login) {
         try {
             LabWorkDTO lab = a;
@@ -65,6 +76,8 @@ public class Repository {
         return r;
     }
 
+    // Метод, который добавляет лабораторную работу в базу данных, если она минимальна.
+    // Добавление лабораторной работы в базу, если она минимальна.
     public static Response addIfMin(LabWorkDTO a, String login) {
         Response response = new Response("AddIfMinAnswerNotMin");
         response.setCommand("add_if_min");
@@ -74,8 +87,10 @@ public class Repository {
             PreparedStatement stmt = c.prepareStatement(CreateInSql);
             ResultSet res = stmt.executeQuery();
             if (res.next()) {
-                if (res.getString("name").compareTo(a.getName()) <= 0)
+                if (res.getString("name").compareTo(a.getName()) <= 0) {
+                    response.setForUpdate();
                     return response;
+                }
             }
             return new Add().execute(a, login);
 
@@ -86,6 +101,7 @@ public class Repository {
 
     }
 
+    // Метод, очищающий все лабораторные работы пользователя.
     public static Response clearUsersLabworks(String login) {
         Response response = new Response("");
         response.setCommand("clear");
@@ -273,6 +289,7 @@ public class Repository {
         }
     }
 
+    // Удаление пользователя по id.
     public static Response removeById(int id, String login) {
         try {
             Response response;
@@ -303,6 +320,7 @@ public class Repository {
         }
     }
 
+    // Удаление первой записи пользователя.
     public static String removeFirst(String login) {
         try {
             Connection c = TableCreator.getConnection();

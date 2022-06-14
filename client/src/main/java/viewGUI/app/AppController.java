@@ -186,7 +186,6 @@ public class AppController {
 
         objectCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, //mouse click on map
                 e -> {
-//                        System.out.println(e.getX() + " " + e.getY());
                     ObservableList<LabModel> list = labModelTableView.getItems();
                     for (LabModel lab : list) {
                         if (e.getX() < tabMap.getWidth() / 2 + lab.getX() + lab.getWeight() / 2 && e.getX() > tabMap.getWidth() / 2 + lab.getX() - lab.getWeight() / 2)
