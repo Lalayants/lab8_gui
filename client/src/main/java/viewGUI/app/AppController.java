@@ -247,10 +247,15 @@ public class AppController {
                 break;
             }
         }
-        if (id != null)
-            drawnIDs.add(id);
-        redrawPlain();
-        drawnBefore();
+        try {
+            Thread.sleep(250);
+            if (id != null)
+                drawnIDs.add(id);
+            redrawPlain();
+            drawnBefore();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void drawnBefore() {
