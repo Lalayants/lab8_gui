@@ -225,10 +225,11 @@ public class AppController {
                         new KeyFrame(Duration.seconds(0.25),
                                 new KeyValue(xx, x),
                                 new KeyValue(yy, y)
-                        )//,
-//                        new KeyFrame(Duration.seconds(0.26),
-//                                new KeyValue(xx, 3000),
-//                                new KeyValue(yy, 3000))
+                        )
+                        ,
+                        new KeyFrame(Duration.seconds(0.26),
+                                new KeyValue(xx, 3000),
+                                new KeyValue(yy, 3000))
                 );
                 AnimationTimer timer = new AnimationTimer() {
                     @Override
